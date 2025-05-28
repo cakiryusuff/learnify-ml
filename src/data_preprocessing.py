@@ -41,7 +41,8 @@ class DataPreprocessor():
                  apply_scale: bool = False,
                  apply_outlier: bool = False,
                  apply_vif: bool = False,
-                 apply_skewness: bool = False):
+                 apply_skewness: bool = False,
+                 encode_target_column: bool = False):
         
         self.impute_strategy = impute_strategy
         self.impute_strategy_remove = impute_strategy_remove
@@ -53,6 +54,7 @@ class DataPreprocessor():
         self.apply_outlier = apply_outlier
         self.apply_smote = apply_smote
         self.apply_skewness = apply_skewness
+        self.encode_target_column = encode_target_column
 
     def preprocess_data(self, df: pd.DataFrame) -> pd.DataFrame:
         try:
@@ -262,6 +264,10 @@ class DataPreprocessor():
             categorical_cols = df.select_dtypes(include=['object']).columns
             for col in categorical_cols:
                 df[col] = df[col].astype('category').cat.codes
+                
+            if self.encode_target_column and self.target_column in df.columns:
+                logger.info(f"Label encoding target column: {self.target_column}")
+                df[self.target_column] = df[self.target_column].astype('category').cat.codes
                 
             return df
         except Exception as e:
