@@ -13,6 +13,24 @@ from sklearn.ensemble import RandomForestClassifier
 logger = get_logger(__name__)
 
 class ModelTrainer:
+    """
+    A class to handle the training of machine learning models.
+    
+    This class includes methods for splitting data, training models, evaluating them, and saving the best model.
+    
+    Parameters
+    ----------
+    target_column (str) : The name of the target column in the data.
+    data_path (str) : The path to the preprocessed data.
+    model_save_path (str) : The path to save the trained models.
+    model (sklearn model) : The default model to be trained if hyperparameter tuning is not applied.
+    models_list (dict) : A dictionary of models to be used for Hyperparameter Tuning and trained (e.g., {"RandomForest": RandomForestClassifier(), "KNeighbors": KNeighborsClassifier()}).
+    params_list (dict) : A dictionary of hyperparameters for each model {"RandomForest": {"n_estimators": [100, 200]}, "KNeighbors": {"n_neighbors": [3, 5]}}.
+    apply_hyperparameter_tuning (bool) : Whether to apply hyperparameter tuning or not.
+    use_case (str) : The type of machine learning task (e.g., "classification", "regression", "clustering").
+    test_size (float) : The proportion of the data to use for testing.
+    random_state (int) : The random state for reproducibility.
+    """
     def __init__(self, target_column: str = ...,
                  data_path: str = DATA_PREPROCESSING_OUTPUT,
                  model_save_path: str = MODEL_SAVE_PATH,
@@ -23,18 +41,6 @@ class ModelTrainer:
                  use_case: str = "classification", # TODO: Regression and clustering will be added
                  test_size: float = 0.2,
                  random_state: int = 42):
-        
-        """
-        Initialize the ModelTrainer class.
-        
-        Parameters:
-        target_column (str): The name of the target column in the data.
-        data_path (str): The path to the preprocessed data.
-        model_save_path (str): The path to save the trained models.
-        models_list (dict): A dictionary of models to be used for Hyperparameter Tuning and trained (e.g., {"RandomForest": RandomForestClassifier(), "KNeighbors": KNeighborsClassifier()}).
-        params_list (dict): A dictionary of hyperparameters for each model {"RandomForest": {"n_estimators": [100, 200]}, "KNeighbors": {"n_neighbors": [3, 5]}}.
-        test_size (float): The proportion of the data to use for testing.
-        """
         
         self.target_column = target_column
         self.data_path = data_path

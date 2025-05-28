@@ -10,6 +10,27 @@ from config.config_paths import *
 logger = get_logger(__name__)
 
 class DataPreprocessor():
+    """Initialize the DataPreprocessor with target column and paths.
+    
+    This class handles data preprocessing tasks such as handling missing values, scaling, encoding, feature selection, and balancing the dataset.
+    It includes methods for preprocessing the data, handling missing values, removing outliers, scaling numeric features, label encoding, feature selection, variance inflation factor (VIF) calculation, skewness treatment, and balancing the dataset using SMOTE.
+    It also provides a method to run the complete preprocessing pipeline.
+    
+    Parameters
+    ----------
+    
+    target_column (str) : The name of the target column in the dataset.
+    data_path (str): The path to the input dataset.
+    data_output_path (str): The path where the preprocessed dataset will be saved.
+    impute_strategy (str): The strategy to use for imputation (e.g., 'mean', 'median', 'most_frequent').
+    impute_strategy_remove (str): The strategy to use for imputation (e.g., 'column', 'row', None).
+    apply_smote (bool): Whether to apply SMOTE (Synthetic Minority Over-sampling Technique) or not.
+    apply_scale (bool): Whether to apply scaling or not.
+    apply_outlier (bool): Whether to apply outlier detection or not.
+    apply_vif (bool): Whether to apply VIF (Variance Inflation Factor) or not.
+    apply_skewness (bool): Whether to apply skewness detection or not.
+    """
+    
     def __init__(self, 
                  target_column: str = ...,
                  data_path: str | None = DATA_PREPROCESSING_INPUT,
@@ -22,20 +43,7 @@ class DataPreprocessor():
                  apply_vif: bool = False,
                  apply_skewness: bool = False):
         
-        """
-        Initialize the DataPreprocessor with target column and paths.
-        Parameters:
-        target_column (str): The name of the target column in the dataset.
-        data_path (str): The path to the input dataset.
-        data_output_path (str): The path where the preprocessed dataset will be saved.
-        impute_strategy (str): The strategy to use for imputation (e.g., 'mean', 'median', 'most_frequent').
-        impute_strategy_remove (str): The strategy to use for imputation (e.g., 'column', 'row', None).
-        apply_smote (bool): Whether to apply SMOTE (Synthetic Minority Over-sampling Technique) or not.
-        apply_scale (bool): Whether to apply scaling or not.
-        apply_outlier (bool): Whether to apply outlier detection or not.
-        apply_vif (bool): Whether to apply VIF (Variance Inflation Factor) or not.
-        apply_skewness (bool): Whether to apply skewness detection or not.
-        """
+
         
         self.impute_strategy = impute_strategy
         self.impute_strategy_remove = impute_strategy_remove
