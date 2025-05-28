@@ -29,7 +29,7 @@
 -  Automatically selects best hyperparameters and retrains final model
 ---
 
-## 🔧 Installation
+## Installation
 
 ```bash
 pip install learnify-ml
