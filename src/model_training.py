@@ -91,7 +91,7 @@ class ModelTrainer:
                         "best_score": search.best_score_,
                         "best_params": search.best_params_
                     }
-                    logger.info(f"Model {name} trained with best score: {search.best_score_}")
+                    logger.info(f"- Model {name} trained with best score: {search.best_score_}")
                 return results
             else:
                 logger.info(f"Starting Single Model Training {str(self.model)}")
@@ -148,9 +148,7 @@ class ModelTrainer:
     
     def run_training(self):
         try:
-            logger.info("------------------------------------------------------")
-            logger.info("Starting model training process")
-            
+            logger.info("------------------------------------------------------")            
             df = load_data(self.data_path)
             X_train, X_test, y_train, y_test = self.split_train_test(df)
             results = self.train_models(X_train, y_train)

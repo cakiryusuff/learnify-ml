@@ -2,3 +2,8 @@
 /build
 /dist
 /learnify_ml.egg-info
+artifacts/dataset/*
+artifacts/model/*
+logs/*
+deneme.py
+venv/

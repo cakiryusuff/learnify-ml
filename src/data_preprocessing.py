@@ -38,12 +38,10 @@ class DataPreprocessor():
                  impute_strategy: Literal["mean", "median", "most_frequent"] = "mean",
                  impute_strategy_remove: Literal["column", "row", None] = None,
                  apply_smote: bool = True,
-                 apply_scale: bool = True,
+                 apply_scale: bool = False,
                  apply_outlier: bool = False,
                  apply_vif: bool = False,
                  apply_skewness: bool = False):
-        
-
         
         self.impute_strategy = impute_strategy
         self.impute_strategy_remove = impute_strategy_remove
