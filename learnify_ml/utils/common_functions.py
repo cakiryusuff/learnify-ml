@@ -1,6 +1,6 @@
 import pandas as pd
-from src.custom_exception import CustomException
-from src.logger import get_logger
+from learnify_ml.src.custom_exception import CustomException
+from learnify_ml.src.logger import get_logger
 
 logger = get_logger(__name__)
 

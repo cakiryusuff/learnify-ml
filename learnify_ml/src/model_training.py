@@ -1,9 +1,9 @@
 import pandas as pd
-from utils.common_functions import load_data, save_data
-from src.custom_exception import CustomException
-from src.logger import get_logger
-from config.config_paths import *
-from config.model_config import models, params, search_methods, search_methods_params
+from learnify_ml.utils.common_functions import load_data, save_data
+from learnify_ml.src.custom_exception import CustomException
+from learnify_ml.src.logger import get_logger
+from learnify_ml.config.config_paths import *
+from learnify_ml.config.model_config import models, params, search_methods, search_methods_params
 from typing import Literal
 import os
 

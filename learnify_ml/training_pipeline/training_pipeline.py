@@ -1,7 +1,7 @@
-from config.config_paths import *
-from config.model_config import models, params
-from src.data_preprocessing import DataPreprocessor
-from src.model_training import ModelTrainer
+from learnify_ml.config.config_paths import *
+from learnify_ml.config.model_config import models, params
+from learnify_ml.src.data_preprocessing import DataPreprocessor
+from learnify_ml.src.model_training import ModelTrainer
 from typing import Literal
 from sklearn.ensemble import RandomForestClassifier
 

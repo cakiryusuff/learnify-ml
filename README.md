@@ -1,6 +1,6 @@
 # learnify-ml
 
-**learnify-ml** is an end-to-end automated machine learning (AutoML) pipeline for tabular data. It handles everything from preprocessing to model training and evaluation — with minimal manual code.
+**learnify-ml** is an end-to-end automated machine learning (AutoML) pipeline for tabular data. It handles everything from preprocessing to model training and evaluation with minimal manual code.
 
 ---
 

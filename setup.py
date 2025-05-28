@@ -1,14 +1,19 @@
 from setuptools import setup, find_packages
 
-with open("requirements.txt") as f:
-    requirements = f.read().splitlines()
-    
 setup(
     name="learnify_ml",
-    version="0.0.1",
+    version="0.0.5",
     author="Yusuf Çakır",
     packages=find_packages(),
-    install_requires=requirements,
+    install_requires=[
+        "numpy==1.26.4",
+        "pandas==1.5.3",
+        "scikit-learn",
+        "lightgbm",
+        "xgboost",
+        "imbalanced-learn",
+        "statsmodels"
+        ],
     description="A package for auto preprocessing and training machine learning models",
     long_description=open("README.md").read(),
     long_description_content_type="text/markdown",

@@ -1,0 +1,610 @@
+[2025-05-28 14:56:53,596] [INFO] - ------------------------------------------------------
+[2025-05-28 14:56:53,597] [INFO] - Running complete preprocessing pipeline
+[2025-05-28 14:56:53,597] [INFO] - Loading data from artifacts/dataset/train.csv
+[2025-05-28 14:56:53,600] [INFO] - Starting data preprocessing
+[2025-05-28 14:56:53,604] [INFO] - Splitting object columns into categorical and text columns
+[2025-05-28 14:56:53,607] [INFO] - - Number of categorical columns: 2, categorical columns: ['Sex', 'Embarked']
+[2025-05-28 14:56:53,607] [INFO] - - Number of text columns: 3, text columns: ['Name', 'Ticket', 'Cabin']
+[2025-05-28 14:56:53,608] [INFO] - Skipping removal of outliers as apply_outlier is set to False
+[2025-05-28 14:56:53,609] [INFO] - Handling missing values in the DataFrame
+[2025-05-28 14:56:53,609] [INFO] - - Imputing missing values based on the specified strategy
+[2025-05-28 14:56:53,611] [INFO] - Skipping skewness treatment as apply_skewness is set to False
+[2025-05-28 14:56:53,611] [INFO] - Scaling numeric features in the DataFrame
+[2025-05-28 14:56:53,614] [INFO] - Starting label encoding of categorical columns
+[2025-05-28 14:56:53,615] [INFO] - Selecting features based on correlation with target variable
+[2025-05-28 14:56:53,616] [INFO] - Skipping variance inflation factor (VIF) calculation as apply_vif is set to False
+[2025-05-28 14:56:53,616] [INFO] - Balancing the dataset using SMOTE
+[2025-05-28 14:56:53,920] [INFO] - Saving data to artifacts/dataset/preprocessed_data.csv
+[2025-05-28 14:56:53,924] [INFO] - Preprocessing completed successfully
+[2025-05-28 14:56:53,924] [INFO] - ------------------------------------------------------
+[2025-05-28 14:56:53,924] [INFO] - Starting model training process
+[2025-05-28 14:56:53,924] [INFO] - Loading data from artifacts/dataset/preprocessed_data.csv
+[2025-05-28 14:56:53,938] [INFO] - Splitting data into training and testing sets
+[2025-05-28 14:56:53,940] [INFO] - Starting model training
+[2025-05-28 14:56:53,940] [INFO] - Training model: RandomForest
+[2025-05-28 14:56:58,080] [INFO] - Model RandomForest trained with best score: 0.799523119360419
+[2025-05-28 14:56:58,081] [INFO] - Training model: KNeighbors
+[2025-05-28 14:56:58,267] [INFO] - Model KNeighbors trained with best score: 0.7927127651284929
+[2025-05-28 14:56:58,267] [INFO] - Training model: SVC
+[2025-05-28 14:56:58,641] [INFO] - Model SVC trained with best score: 0.7608350086493058
+[2025-05-28 14:56:58,641] [INFO] - Training model: XGBoost
+[2025-05-28 14:57:00,265] [INFO] - Model XGBoost trained with best score: 0.7961101500771425
+[2025-05-28 14:57:00,265] [INFO] - Training model: LightGBM
+[2025-05-28 14:57:02,298] [INFO] - Model LightGBM trained with best score: 0.7892608350086494
+[2025-05-28 14:57:02,298] [INFO] - Starting model evaluation
+[2025-05-28 14:57:02,318] [INFO] - - Model RandomForest: Accuracy: 0.8136363636363636, F1 Score: 0.8193832599118943, Precision: 0.8454545454545455, Recall: 0.7948717948717948
+[2025-05-28 14:57:02,330] [INFO] - - Model KNeighbors: Accuracy: 0.8136363636363636, F1 Score: 0.8193832599118943, Precision: 0.8454545454545455, Recall: 0.7948717948717948
+[2025-05-28 14:57:02,347] [INFO] - - Model SVC: Accuracy: 0.8045454545454546, F1 Score: 0.8088888888888889, Precision: 0.8425925925925926, Recall: 0.7777777777777778
+[2025-05-28 14:57:02,362] [INFO] - - Model XGBoost: Accuracy: 0.8090909090909091, F1 Score: 0.8141592920353983, Precision: 0.8440366972477065, Recall: 0.7863247863247863
+[2025-05-28 14:57:02,376] [INFO] - - Model LightGBM: Accuracy: 0.8136363636363636, F1 Score: 0.8193832599118943, Precision: 0.8454545454545455, Recall: 0.7948717948717948
+[2025-05-28 14:57:02,376] [INFO] - Saving the best model to artifacts/model/
+[2025-05-28 14:57:02,412] [INFO] - - Best model saved successfully
+[2025-05-28 14:57:02,412] [INFO] - Model training process completed successfully
+[2025-05-28 14:58:03,681] [INFO] - ------------------------------------------------------
+[2025-05-28 14:58:03,682] [INFO] - Running complete preprocessing pipeline
+[2025-05-28 14:58:03,682] [INFO] - Loading data from artifacts/dataset/train.csv
+[2025-05-28 14:58:03,688] [INFO] - Starting data preprocessing
+[2025-05-28 14:58:03,691] [INFO] - Splitting object columns into categorical and text columns
+[2025-05-28 14:58:03,694] [INFO] - - Number of categorical columns: 2, categorical columns: ['Sex', 'Embarked']
+[2025-05-28 14:58:03,695] [INFO] - - Number of text columns: 3, text columns: ['Name', 'Ticket', 'Cabin']
+[2025-05-28 14:58:03,695] [INFO] - Skipping removal of outliers as apply_outlier is set to False
+[2025-05-28 14:58:03,695] [INFO] - Handling missing values in the DataFrame
+[2025-05-28 14:58:03,695] [INFO] - - Imputing missing values based on the specified strategy
+[2025-05-28 14:58:03,697] [INFO] - Skipping skewness treatment as apply_skewness is set to False
+[2025-05-28 14:58:03,697] [INFO] - Scaling numeric features in the DataFrame
+[2025-05-28 14:58:03,700] [INFO] - Starting label encoding of categorical columns
+[2025-05-28 14:58:03,701] [INFO] - Selecting features based on correlation with target variable
+[2025-05-28 14:58:03,703] [INFO] - Skipping variance inflation factor (VIF) calculation as apply_vif is set to False
+[2025-05-28 14:58:03,703] [INFO] - Balancing the dataset using SMOTE
+[2025-05-28 14:58:04,023] [INFO] - Saving data to artifacts/dataset/preprocessed_data.csv
+[2025-05-28 14:58:04,027] [INFO] - Preprocessing completed successfully
+[2025-05-28 14:58:04,028] [INFO] - ------------------------------------------------------
+[2025-05-28 14:58:04,028] [INFO] - Starting model training process
+[2025-05-28 14:58:04,028] [INFO] - Loading data from artifacts/dataset/preprocessed_data.csv
+[2025-05-28 14:58:04,041] [INFO] - Splitting data into training and testing sets
+[2025-05-28 14:58:04,043] [INFO] - Starting model training
+[2025-05-28 14:58:04,043] [INFO] - Training model: RandomForest
+[2025-05-28 14:58:07,912] [INFO] - Model RandomForest trained with best score: 0.7995425997787025
+[2025-05-28 14:58:07,912] [INFO] - Training model: KNeighbors
+[2025-05-28 14:58:08,095] [INFO] - Model KNeighbors trained with best score: 0.7927127651284929
+[2025-05-28 14:58:08,095] [INFO] - Training model: SVC
+[2025-05-28 14:58:08,442] [INFO] - Model SVC trained with best score: 0.7608350086493058
+[2025-05-28 14:58:08,442] [INFO] - Training model: XGBoost
+[2025-05-28 14:58:09,951] [INFO] - Model XGBoost trained with best score: 0.7961101500771425
+[2025-05-28 14:58:09,952] [INFO] - Training model: LightGBM
+[2025-05-28 14:58:11,937] [INFO] - Model LightGBM trained with best score: 0.7892608350086494
+[2025-05-28 14:58:11,937] [INFO] - Starting model evaluation
+[2025-05-28 14:58:11,968] [INFO] - - Model RandomForest: Accuracy: 0.8136363636363636, F1 Score: 0.8193832599118943, Precision: 0.8454545454545455, Recall: 0.7948717948717948
+[2025-05-28 14:58:11,986] [INFO] - - Model KNeighbors: Accuracy: 0.8136363636363636, F1 Score: 0.8193832599118943, Precision: 0.8454545454545455, Recall: 0.7948717948717948
+[2025-05-28 14:58:12,011] [INFO] - - Model SVC: Accuracy: 0.8045454545454546, F1 Score: 0.8088888888888889, Precision: 0.8425925925925926, Recall: 0.7777777777777778
+[2025-05-28 14:58:12,032] [INFO] - - Model XGBoost: Accuracy: 0.8090909090909091, F1 Score: 0.8141592920353983, Precision: 0.8440366972477065, Recall: 0.7863247863247863
+[2025-05-28 14:58:12,043] [INFO] - - Model LightGBM: Accuracy: 0.8136363636363636, F1 Score: 0.8193832599118943, Precision: 0.8454545454545455, Recall: 0.7948717948717948
+[2025-05-28 14:58:12,043] [INFO] - Saving the best model to artifacts/model/
+[2025-05-28 14:58:12,081] [INFO] - - Best model saved successfully
+[2025-05-28 14:58:12,081] [INFO] - Model training process completed successfully
+[2025-05-28 14:59:13,655] [INFO] - ------------------------------------------------------
+[2025-05-28 14:59:13,655] [INFO] - Running complete preprocessing pipeline
+[2025-05-28 14:59:13,655] [INFO] - Loading data from artifacts/dataset/train.csv
+[2025-05-28 14:59:13,658] [INFO] - Starting data preprocessing
+[2025-05-28 14:59:13,661] [INFO] - Splitting object columns into categorical and text columns
+[2025-05-28 14:59:13,664] [INFO] - - Number of categorical columns: 2, categorical columns: ['Sex', 'Embarked']
+[2025-05-28 14:59:13,664] [INFO] - - Number of text columns: 3, text columns: ['Name', 'Ticket', 'Cabin']
+[2025-05-28 14:59:13,664] [INFO] - Skipping removal of outliers as apply_outlier is set to False
+[2025-05-28 14:59:13,664] [INFO] - Handling missing values in the DataFrame
+[2025-05-28 14:59:13,664] [INFO] - - Imputing missing values based on the specified strategy
+[2025-05-28 14:59:13,666] [INFO] - Skipping skewness treatment as apply_skewness is set to False
+[2025-05-28 14:59:13,666] [INFO] - Scaling numeric features in the DataFrame
+[2025-05-28 14:59:13,668] [INFO] - Starting label encoding of categorical columns
+[2025-05-28 14:59:13,669] [INFO] - Selecting features based on correlation with target variable
+[2025-05-28 14:59:13,671] [INFO] - Skipping variance inflation factor (VIF) calculation as apply_vif is set to False
+[2025-05-28 14:59:13,671] [INFO] - Balancing the dataset using SMOTE
+[2025-05-28 14:59:13,965] [INFO] - Saving data to artifacts/dataset/preprocessed_data.csv
+[2025-05-28 14:59:13,969] [INFO] - Preprocessing completed successfully
+[2025-05-28 14:59:13,969] [INFO] - ------------------------------------------------------
+[2025-05-28 14:59:13,969] [INFO] - Starting model training process
+[2025-05-28 14:59:13,969] [INFO] - Loading data from artifacts/dataset/preprocessed_data.csv
+[2025-05-28 14:59:13,981] [INFO] - Splitting data into training and testing sets
+[2025-05-28 14:59:13,982] [INFO] - Starting model training
+[2025-05-28 14:59:13,982] [INFO] - Training model: RandomForest
+[2025-05-28 14:59:18,042] [INFO] - Model RandomForest trained with best score: 0.797251702588558
+[2025-05-28 14:59:18,042] [INFO] - Training model: KNeighbors
+[2025-05-28 14:59:18,210] [INFO] - Model KNeighbors trained with best score: 0.7927127651284929
+[2025-05-28 14:59:18,210] [INFO] - Training model: SVC
+[2025-05-28 14:59:18,546] [INFO] - Model SVC trained with best score: 0.7608350086493058
+[2025-05-28 14:59:18,546] [INFO] - Training model: XGBoost
+[2025-05-28 14:59:19,906] [INFO] - Model XGBoost trained with best score: 0.7961101500771425
+[2025-05-28 14:59:19,906] [INFO] - Training model: LightGBM
+[2025-05-28 14:59:21,866] [INFO] - Model LightGBM trained with best score: 0.7892608350086494
+[2025-05-28 14:59:21,866] [INFO] - Starting model evaluation
+[2025-05-28 14:59:21,889] [INFO] - - Model RandomForest: Accuracy: 0.8, F1 Score: 0.808695652173913, Precision: 0.8230088495575221, Recall: 0.7948717948717948
+[2025-05-28 14:59:21,900] [INFO] - - Model KNeighbors: Accuracy: 0.8136363636363636, F1 Score: 0.8193832599118943, Precision: 0.8454545454545455, Recall: 0.7948717948717948
+[2025-05-28 14:59:21,917] [INFO] - - Model SVC: Accuracy: 0.8045454545454546, F1 Score: 0.8088888888888889, Precision: 0.8425925925925926, Recall: 0.7777777777777778
+[2025-05-28 14:59:21,930] [INFO] - - Model XGBoost: Accuracy: 0.8090909090909091, F1 Score: 0.8141592920353983, Precision: 0.8440366972477065, Recall: 0.7863247863247863
+[2025-05-28 14:59:21,942] [INFO] - - Model LightGBM: Accuracy: 0.8136363636363636, F1 Score: 0.8193832599118943, Precision: 0.8454545454545455, Recall: 0.7948717948717948
+[2025-05-28 14:59:21,942] [INFO] - Saving the best model to artifacts/model/
+[2025-05-28 14:59:21,944] [INFO] - - Best model saved successfully
+[2025-05-28 14:59:21,944] [INFO] - Model training process completed successfully
+[2025-05-28 15:02:37,702] [INFO] - ------------------------------------------------------
+[2025-05-28 15:02:37,702] [INFO] - Running complete preprocessing pipeline
+[2025-05-28 15:02:37,702] [INFO] - Loading data from artifacts/dataset/train.csv
+[2025-05-28 15:02:37,707] [INFO] - Starting data preprocessing
+[2025-05-28 15:02:37,710] [INFO] - Splitting object columns into categorical and text columns
+[2025-05-28 15:02:37,713] [INFO] - - Number of categorical columns: 2, categorical columns: ['Sex', 'Embarked']
+[2025-05-28 15:02:37,713] [INFO] - - Number of text columns: 3, text columns: ['Name', 'Ticket', 'Cabin']
+[2025-05-28 15:02:37,713] [INFO] - Skipping removal of outliers as apply_outlier is set to False
+[2025-05-28 15:02:37,713] [INFO] - Handling missing values in the DataFrame
+[2025-05-28 15:02:37,713] [INFO] - - Imputing missing values based on the specified strategy
+[2025-05-28 15:02:37,715] [INFO] - Skipping skewness treatment as apply_skewness is set to False
+[2025-05-28 15:02:37,715] [INFO] - Scaling numeric features in the DataFrame
+[2025-05-28 15:02:37,718] [INFO] - Starting label encoding of categorical columns
+[2025-05-28 15:02:37,719] [INFO] - Selecting features based on correlation with target variable
+[2025-05-28 15:02:37,720] [INFO] - Skipping variance inflation factor (VIF) calculation as apply_vif is set to False
+[2025-05-28 15:02:37,721] [INFO] - Balancing the dataset using SMOTE
+[2025-05-28 15:02:38,386] [INFO] - Saving data to artifacts/dataset/preprocessed_data.csv
+[2025-05-28 15:02:38,388] [INFO] - Preprocessing completed successfully
+[2025-05-28 15:02:38,388] [INFO] - ------------------------------------------------------
+[2025-05-28 15:02:38,388] [INFO] - Starting model training process
+[2025-05-28 15:02:38,388] [INFO] - Loading data from artifacts/dataset/preprocessed_data.csv
+[2025-05-28 15:02:38,400] [INFO] - Splitting data into training and testing sets
+[2025-05-28 15:02:38,401] [INFO] - Starting model training
+[2025-05-28 15:02:38,401] [INFO] - Training model: RandomForest
+[2025-05-28 15:02:42,483] [INFO] - Model RandomForest trained with best score: 0.8052308819174966
+[2025-05-28 15:02:42,483] [INFO] - Training model: KNeighbors
+[2025-05-28 15:02:42,663] [INFO] - Model KNeighbors trained with best score: 0.7927127651284929
+[2025-05-28 15:02:42,663] [INFO] - Training model: SVC
+[2025-05-28 15:02:43,013] [INFO] - Model SVC trained with best score: 0.7608350086493058
+[2025-05-28 15:02:43,013] [INFO] - Training model: XGBoost
+[2025-05-28 15:02:44,640] [INFO] - Model XGBoost trained with best score: 0.7961101500771425
+[2025-05-28 15:02:44,640] [INFO] - Training model: LightGBM
+[2025-05-28 15:02:47,035] [INFO] - Model LightGBM trained with best score: 0.7892608350086494
+[2025-05-28 15:02:47,035] [INFO] - Starting model evaluation
+[2025-05-28 15:02:47,055] [INFO] - - Model RandomForest: Accuracy: 0.8045454545454546, F1 Score: 0.8122270742358079, Precision: 0.8303571428571429, Recall: 0.7948717948717948
+[2025-05-28 15:02:47,069] [INFO] - - Model KNeighbors: Accuracy: 0.8136363636363636, F1 Score: 0.8193832599118943, Precision: 0.8454545454545455, Recall: 0.7948717948717948
+[2025-05-28 15:02:47,088] [INFO] - - Model SVC: Accuracy: 0.8045454545454546, F1 Score: 0.8088888888888889, Precision: 0.8425925925925926, Recall: 0.7777777777777778
+[2025-05-28 15:02:47,104] [INFO] - - Model XGBoost: Accuracy: 0.8090909090909091, F1 Score: 0.8141592920353983, Precision: 0.8440366972477065, Recall: 0.7863247863247863
+[2025-05-28 15:02:47,118] [INFO] - - Model LightGBM: Accuracy: 0.8136363636363636, F1 Score: 0.8193832599118943, Precision: 0.8454545454545455, Recall: 0.7948717948717948
+[2025-05-28 15:02:47,118] [INFO] - Saving the best model to artifacts/model/
+[2025-05-28 15:02:47,118] [INFO] - - Best model saved successfully
+[2025-05-28 15:02:47,118] [INFO] - Model training process completed successfully
+[2025-05-28 16:04:42,718] [INFO] - ------------------------------------------------------
+[2025-05-28 16:04:42,718] [INFO] - Running complete preprocessing pipeline
+[2025-05-28 16:04:42,719] [INFO] - Loading data from artifacts/dataset/glass.csv
+[2025-05-28 16:04:42,721] [INFO] - Starting data preprocessing
+[2025-05-28 16:04:42,722] [INFO] - Splitting object columns into categorical and text columns
+[2025-05-28 16:04:42,724] [INFO] - - Number of categorical columns: 0, categorical columns: []
+[2025-05-28 16:04:42,724] [INFO] - - Number of text columns: 0, text columns: []
+[2025-05-28 16:04:42,724] [INFO] - Skipping removal of outliers as apply_outlier is set to False
+[2025-05-28 16:04:42,724] [INFO] - Handling missing values in the DataFrame
+[2025-05-28 16:04:42,724] [INFO] - - Imputing missing values based on the specified strategy
+[2025-05-28 16:04:42,726] [INFO] - Skipping skewness treatment as apply_skewness is set to False
+[2025-05-28 16:04:42,726] [INFO] - Scaling numeric features in the DataFrame
+[2025-05-28 16:04:42,729] [INFO] - Starting label encoding of categorical columns
+[2025-05-28 16:04:42,730] [INFO] - Selecting features based on correlation with target variable
+[2025-05-28 16:04:42,730] [ERROR] - Error in feature selection: 'Survived'
+[2025-05-28 16:04:42,730] [ERROR] - Error in running preprocessing pipeline: Error in c:\Users\cakir\OneDrive\Belgeler\GitHub\learnify-ml\src\data_preprocessing.py , line 285 : 'Survived'
+[2025-05-28 16:04:55,990] [INFO] - ------------------------------------------------------
+[2025-05-28 16:04:55,990] [INFO] - Running complete preprocessing pipeline
+[2025-05-28 16:04:55,990] [INFO] - Loading data from artifacts/dataset/glass.csv
+[2025-05-28 16:04:55,993] [INFO] - Starting data preprocessing
+[2025-05-28 16:04:55,994] [INFO] - Splitting object columns into categorical and text columns
+[2025-05-28 16:04:55,995] [INFO] - - Number of categorical columns: 0, categorical columns: []
+[2025-05-28 16:04:55,995] [INFO] - - Number of text columns: 0, text columns: []
+[2025-05-28 16:04:55,995] [INFO] - Skipping removal of outliers as apply_outlier is set to False
+[2025-05-28 16:04:55,995] [INFO] - Handling missing values in the DataFrame
+[2025-05-28 16:04:55,995] [INFO] - - Imputing missing values based on the specified strategy
+[2025-05-28 16:04:55,997] [INFO] - Skipping skewness treatment as apply_skewness is set to False
+[2025-05-28 16:04:55,997] [INFO] - Scaling numeric features in the DataFrame
+[2025-05-28 16:04:56,000] [INFO] - Starting label encoding of categorical columns
+[2025-05-28 16:04:56,000] [INFO] - Selecting features based on correlation with target variable
+[2025-05-28 16:04:56,001] [INFO] - Skipping variance inflation factor (VIF) calculation as apply_vif is set to False
+[2025-05-28 16:04:56,001] [INFO] - Balancing the dataset using SMOTE
+[2025-05-28 16:04:57,790] [INFO] - Saving data to artifacts/dataset/preprocessed_data.csv
+[2025-05-28 16:04:57,795] [INFO] - Preprocessing completed successfully
+[2025-05-28 16:04:57,796] [INFO] - ------------------------------------------------------
+[2025-05-28 16:04:57,796] [INFO] - Loading data from artifacts/dataset/preprocessed_data.csv
+[2025-05-28 16:04:57,809] [INFO] - Splitting data into training and testing sets
+[2025-05-28 16:04:57,811] [INFO] - Starting model training
+[2025-05-28 16:04:57,811] [INFO] - Training model: RandomForest
+[2025-05-28 16:05:01,396] [INFO] - - Model RandomForest trained with best score: 0.8736169444068103
+[2025-05-28 16:05:01,396] [INFO] - Training model: KNeighbors
+[2025-05-28 16:05:01,516] [INFO] - - Model KNeighbors trained with best score: 0.8270333739782324
+[2025-05-28 16:05:01,516] [INFO] - Training model: SVC
+[2025-05-28 16:05:01,664] [INFO] - - Model SVC trained with best score: 0.8489590389739421
+[2025-05-28 16:05:01,664] [INFO] - Training model: XGBoost
+[2025-05-28 16:05:01,701] [ERROR] - Error in training models: 
+All the 30 fits failed.
+It is very likely that your model is misconfigured.
+You can try to debug the error by setting error_score='raise'.
+
+Below are more details about the failures:
+--------------------------------------------------------------------------------
+30 fits failed with the following error:
+Traceback (most recent call last):
+  File "C:\Users\cakir\OneDrive\Belgeler\GitHub\learnify-ml\venv\Lib\site-packages\sklearn\model_selection\_validation.py", line 866, in _fit_and_score
+    estimator.fit(X_train, y_train, **fit_params)
+  File "C:\Users\cakir\OneDrive\Belgeler\GitHub\learnify-ml\venv\Lib\site-packages\xgboost\core.py", line 729, in inner_f
+    return func(**kwargs)
+           ^^^^^^^^^^^^^^
+  File "C:\Users\cakir\OneDrive\Belgeler\GitHub\learnify-ml\venv\Lib\site-packages\xgboost\sklearn.py", line 1640, in fit
+    raise ValueError(
+ValueError: Invalid classes inferred from unique values of `y`.  Expected: [0 1 2 3 4 5], got [1 2 3 5 6 7]
+
+[2025-05-28 16:05:01,701] [ERROR] - Error in model training process: Error in c:\Users\cakir\OneDrive\Belgeler\GitHub\learnify-ml\src\model_training.py , line 88 : 
+All the 30 fits failed.
+It is very likely that your model is misconfigured.
+You can try to debug the error by setting error_score='raise'.
+
+Below are more details about the failures:
+--------------------------------------------------------------------------------
+30 fits failed with the following error:
+Traceback (most recent call last):
+  File "C:\Users\cakir\OneDrive\Belgeler\GitHub\learnify-ml\venv\Lib\site-packages\sklearn\model_selection\_validation.py", line 866, in _fit_and_score
+    estimator.fit(X_train, y_train, **fit_params)
+  File "C:\Users\cakir\OneDrive\Belgeler\GitHub\learnify-ml\venv\Lib\site-packages\xgboost\core.py", line 729, in inner_f
+    return func(**kwargs)
+           ^^^^^^^^^^^^^^
+  File "C:\Users\cakir\OneDrive\Belgeler\GitHub\learnify-ml\venv\Lib\site-packages\xgboost\sklearn.py", line 1640, in fit
+    raise ValueError(
+ValueError: Invalid classes inferred from unique values of `y`.  Expected: [0 1 2 3 4 5], got [1 2 3 5 6 7]
+
+[2025-05-28 16:47:38,364] [INFO] - ------------------------------------------------------
+[2025-05-28 16:47:38,364] [INFO] - Running complete preprocessing pipeline
+[2025-05-28 16:47:38,364] [INFO] - Loading data from artifacts/dataset/glass.csv
+[2025-05-28 16:47:38,366] [INFO] - Starting data preprocessing
+[2025-05-28 16:47:38,368] [INFO] - Splitting object columns into categorical and text columns
+[2025-05-28 16:47:38,368] [INFO] - - Number of categorical columns: 0, categorical columns: []
+[2025-05-28 16:47:38,368] [INFO] - - Number of text columns: 0, text columns: []
+[2025-05-28 16:47:38,369] [INFO] - Skipping removal of outliers as apply_outlier is set to False
+[2025-05-28 16:47:38,369] [INFO] - Handling missing values in the DataFrame
+[2025-05-28 16:47:38,369] [INFO] - - Imputing missing values based on the specified strategy
+[2025-05-28 16:47:38,371] [INFO] - Skipping skewness treatment as apply_skewness is set to False
+[2025-05-28 16:47:38,371] [INFO] - Scaling numeric features in the DataFrame
+[2025-05-28 16:47:38,374] [INFO] - Starting label encoding of categorical columns
+[2025-05-28 16:47:38,375] [INFO] - Label encoding target column: Type
+[2025-05-28 16:47:38,375] [INFO] - Selecting features based on correlation with target variable
+[2025-05-28 16:47:38,376] [INFO] - Skipping variance inflation factor (VIF) calculation as apply_vif is set to False
+[2025-05-28 16:47:38,376] [INFO] - Balancing the dataset using SMOTE
+[2025-05-28 16:47:40,538] [INFO] - Saving data to artifacts/dataset/preprocessed_data.csv
+[2025-05-28 16:47:40,541] [INFO] - Preprocessing completed successfully
+[2025-05-28 16:47:40,541] [INFO] - ------------------------------------------------------
+[2025-05-28 16:47:40,541] [INFO] - Loading data from artifacts/dataset/preprocessed_data.csv
+[2025-05-28 16:47:40,560] [INFO] - Splitting data into training and testing sets
+[2025-05-28 16:47:40,561] [INFO] - Starting model training
+[2025-05-28 16:47:40,561] [INFO] - Training model: RandomForest
+[2025-05-28 16:47:44,293] [INFO] - - Model RandomForest trained with best score: 0.8708395429706904
+[2025-05-28 16:47:44,293] [INFO] - Training model: KNeighbors
+[2025-05-28 16:47:44,419] [INFO] - - Model KNeighbors trained with best score: 0.8270333739782324
+[2025-05-28 16:47:44,419] [INFO] - Training model: SVC
+[2025-05-28 16:47:44,579] [INFO] - - Model SVC trained with best score: 0.8489590389739421
+[2025-05-28 16:47:44,579] [INFO] - Training model: XGBoost
+[2025-05-28 16:47:49,549] [INFO] - - Model XGBoost trained with best score: 0.8433816556022219
+[2025-05-28 16:47:49,549] [INFO] - Training model: LightGBM
+[2025-05-28 16:47:51,990] [INFO] - - Model LightGBM trained with best score: 0.870929864968613
+[2025-05-28 16:47:51,990] [INFO] - Starting model evaluation
+[2025-05-28 16:47:51,998] [ERROR] - Error in evaluating models: Target is multiclass but average='binary'. Please choose another average setting, one of [None, 'micro', 'macro', 'weighted'].
+[2025-05-28 16:47:51,998] [ERROR] - Error in model training process: Error in c:\Users\cakir\OneDrive\Belgeler\GitHub\learnify-ml\src\model_training.py , line 114 : Target is multiclass but average='binary'. Please choose another average setting, one of [None, 'micro', 'macro', 'weighted'].
+[2025-05-28 16:58:41,605] [INFO] - ------------------------------------------------------
+[2025-05-28 16:58:41,605] [INFO] - Running complete preprocessing pipeline
+[2025-05-28 16:58:41,605] [INFO] - Loading data from artifacts/dataset/glass.csv
+[2025-05-28 16:58:41,608] [INFO] - Starting data preprocessing
+[2025-05-28 16:58:41,609] [INFO] - Splitting object columns into categorical and text columns
+[2025-05-28 16:58:41,610] [INFO] - - Number of categorical columns: 0, categorical columns: []
+[2025-05-28 16:58:41,610] [INFO] - - Number of text columns: 0, text columns: []
+[2025-05-28 16:58:41,610] [INFO] - Skipping removal of outliers as apply_outlier is set to False
+[2025-05-28 16:58:41,610] [INFO] - Handling missing values in the DataFrame
+[2025-05-28 16:58:41,610] [INFO] - - Imputing missing values based on the specified strategy
+[2025-05-28 16:58:41,612] [INFO] - Skipping skewness treatment as apply_skewness is set to False
+[2025-05-28 16:58:41,612] [INFO] - Scaling numeric features in the DataFrame
+[2025-05-28 16:58:41,615] [INFO] - Starting label encoding of categorical columns
+[2025-05-28 16:58:41,615] [INFO] - Label encoding target column: Type
+[2025-05-28 16:58:41,616] [INFO] - Selecting features based on correlation with target variable
+[2025-05-28 16:58:41,617] [INFO] - Skipping variance inflation factor (VIF) calculation as apply_vif is set to False
+[2025-05-28 16:58:41,617] [INFO] - Balancing the dataset using SMOTE
+[2025-05-28 16:58:43,313] [INFO] - Saving data to artifacts/dataset/preprocessed_data.csv
+[2025-05-28 16:58:43,316] [INFO] - Preprocessing completed successfully
+[2025-05-28 16:58:43,319] [INFO] - ------------------------------------------------------
+[2025-05-28 16:58:43,319] [INFO] - Loading data from artifacts/dataset/preprocessed_data.csv
+[2025-05-28 16:58:43,334] [INFO] - Splitting data into training and testing sets
+[2025-05-28 16:58:43,336] [INFO] - Starting model training
+[2025-05-28 16:58:43,336] [INFO] - Training model: RandomForest
+[2025-05-28 16:58:47,018] [INFO] - - Model RandomForest trained with best score: 0.8653976425958542
+[2025-05-28 16:58:47,018] [INFO] - Training model: KNeighbors
+[2025-05-28 16:58:47,153] [INFO] - - Model KNeighbors trained with best score: 0.8270333739782324
+[2025-05-28 16:58:47,153] [INFO] - Training model: SVC
+[2025-05-28 16:58:47,303] [INFO] - - Model SVC trained with best score: 0.8489590389739421
+[2025-05-28 16:58:47,303] [INFO] - Training model: XGBoost
+[2025-05-28 16:58:53,572] [INFO] - - Model XGBoost trained with best score: 0.8433816556022219
+[2025-05-28 16:58:53,572] [INFO] - Training model: LightGBM
+[2025-05-28 16:58:56,018] [INFO] - - Model LightGBM trained with best score: 0.870929864968613
+[2025-05-28 16:58:56,018] [INFO] - Starting model evaluation
+[2025-05-28 16:58:56,032] [ERROR] - Error in evaluating models: got an unexpected keyword argument 'average'
+[2025-05-28 16:58:56,033] [ERROR] - Error in model training process: Error in c:\Users\cakir\OneDrive\Belgeler\GitHub\learnify-ml\src\model_training.py , line 117 : got an unexpected keyword argument 'average'
+[2025-05-28 16:59:28,441] [INFO] - ------------------------------------------------------
+[2025-05-28 16:59:28,441] [INFO] - Running complete preprocessing pipeline
+[2025-05-28 16:59:28,441] [INFO] - Loading data from artifacts/dataset/glass.csv
+[2025-05-28 16:59:28,445] [INFO] - Starting data preprocessing
+[2025-05-28 16:59:28,447] [INFO] - Splitting object columns into categorical and text columns
+[2025-05-28 16:59:28,447] [INFO] - - Number of categorical columns: 0, categorical columns: []
+[2025-05-28 16:59:28,448] [INFO] - - Number of text columns: 0, text columns: []
+[2025-05-28 16:59:28,448] [INFO] - Skipping removal of outliers as apply_outlier is set to False
+[2025-05-28 16:59:28,448] [INFO] - Handling missing values in the DataFrame
+[2025-05-28 16:59:28,448] [INFO] - - Imputing missing values based on the specified strategy
+[2025-05-28 16:59:28,450] [INFO] - Skipping skewness treatment as apply_skewness is set to False
+[2025-05-28 16:59:28,450] [INFO] - Scaling numeric features in the DataFrame
+[2025-05-28 16:59:28,453] [INFO] - Starting label encoding of categorical columns
+[2025-05-28 16:59:28,454] [INFO] - Label encoding target column: Type
+[2025-05-28 16:59:28,454] [INFO] - Selecting features based on correlation with target variable
+[2025-05-28 16:59:28,454] [INFO] - Skipping variance inflation factor (VIF) calculation as apply_vif is set to False
+[2025-05-28 16:59:28,454] [INFO] - Balancing the dataset using SMOTE
+[2025-05-28 16:59:30,018] [INFO] - Saving data to artifacts/dataset/preprocessed_data.csv
+[2025-05-28 16:59:30,023] [INFO] - Preprocessing completed successfully
+[2025-05-28 16:59:30,023] [INFO] - ------------------------------------------------------
+[2025-05-28 16:59:30,023] [INFO] - Loading data from artifacts/dataset/preprocessed_data.csv
+[2025-05-28 16:59:30,036] [INFO] - Splitting data into training and testing sets
+[2025-05-28 16:59:30,036] [INFO] - Starting model training
+[2025-05-28 16:59:30,036] [INFO] - Training model: RandomForest
+[2025-05-28 16:59:33,789] [INFO] - - Model RandomForest trained with best score: 0.8681298830330126
+[2025-05-28 16:59:33,789] [INFO] - Training model: KNeighbors
+[2025-05-28 16:59:33,919] [INFO] - - Model KNeighbors trained with best score: 0.8270333739782324
+[2025-05-28 16:59:33,919] [INFO] - Training model: SVC
+[2025-05-28 16:59:34,074] [INFO] - - Model SVC trained with best score: 0.8489590389739421
+[2025-05-28 16:59:34,074] [INFO] - Training model: XGBoost
+[2025-05-28 16:59:39,381] [INFO] - - Model XGBoost trained with best score: 0.8433816556022219
+[2025-05-28 16:59:39,381] [INFO] - Training model: LightGBM
+[2025-05-28 16:59:41,949] [INFO] - - Model LightGBM trained with best score: 0.870929864968613
+[2025-05-28 16:59:41,949] [INFO] - Starting model evaluation
+[2025-05-28 16:59:41,977] [INFO] - - Model RandomForest: Accuracy: 0.9239130434782609, F1 Score: 0.9239130434782609, Precision: 0.9239130434782609, Recall: 0.9239130434782609
+[2025-05-28 16:59:41,988] [INFO] - - Model KNeighbors: Accuracy: 0.8804347826086957, F1 Score: 0.8804347826086957, Precision: 0.8804347826086957, Recall: 0.8804347826086957
+[2025-05-28 16:59:41,996] [INFO] - - Model SVC: Accuracy: 0.8586956521739131, F1 Score: 0.8586956521739131, Precision: 0.8586956521739131, Recall: 0.8586956521739131
+[2025-05-28 16:59:42,013] [INFO] - - Model XGBoost: Accuracy: 0.9130434782608695, F1 Score: 0.9130434782608695, Precision: 0.9130434782608695, Recall: 0.9130434782608695
+[2025-05-28 16:59:42,026] [INFO] - - Model LightGBM: Accuracy: 0.9021739130434783, F1 Score: 0.9021739130434783, Precision: 0.9021739130434783, Recall: 0.9021739130434783
+[2025-05-28 16:59:42,026] [INFO] - Saving the best model to artifacts/model/
+[2025-05-28 16:59:42,052] [INFO] - - Best model saved successfully
+[2025-05-28 16:59:42,052] [INFO] - Model training process completed successfully
+[2025-05-28 17:47:38,519] [INFO] - ------------------------------------------------------
+[2025-05-28 17:47:38,519] [INFO] - Running complete preprocessing pipeline
+[2025-05-28 17:47:38,519] [INFO] - Loading data from artifacts/dataset/glass.csv
+[2025-05-28 17:47:38,525] [INFO] - Starting data preprocessing
+[2025-05-28 17:47:38,528] [INFO] - Splitting object columns into categorical and text columns
+[2025-05-28 17:47:38,528] [INFO] - - Number of categorical columns: 0, categorical columns: []
+[2025-05-28 17:47:38,528] [INFO] - - Number of text columns: 0, text columns: []
+[2025-05-28 17:47:38,528] [INFO] - Skipping removal of outliers as apply_outlier is set to False
+[2025-05-28 17:47:38,528] [INFO] - Handling missing values in the DataFrame
+[2025-05-28 17:47:38,528] [INFO] - - Imputing missing values based on the specified strategy
+[2025-05-28 17:47:38,533] [INFO] - Skipping skewness treatment as apply_skewness is set to False
+[2025-05-28 17:47:38,533] [INFO] - Scaling numeric features in the DataFrame
+[2025-05-28 17:47:38,533] [INFO] - Starting label encoding of categorical columns
+[2025-05-28 17:47:38,533] [INFO] - Label encoding target column: Type
+[2025-05-28 17:47:38,533] [INFO] - Selecting features based on correlation with target variable
+[2025-05-28 17:47:38,533] [INFO] - Skipping variance inflation factor (VIF) calculation as apply_vif is set to False
+[2025-05-28 17:47:38,533] [INFO] - Balancing the dataset using SMOTE
+[2025-05-28 17:47:40,640] [INFO] - Saving data to artifacts/dataset/preprocessed_data.csv
+[2025-05-28 17:47:40,645] [INFO] - Preprocessing completed successfully
+[2025-05-28 17:47:40,646] [INFO] - ------------------------------------------------------
+[2025-05-28 17:47:40,646] [INFO] - Loading data from artifacts/dataset/preprocessed_data.csv
+[2025-05-28 17:47:40,659] [INFO] - Splitting data into training and testing sets
+[2025-05-28 17:47:40,659] [INFO] - Starting model training
+[2025-05-28 17:47:40,659] [INFO] - Training model: RandomForest
+[2025-05-28 17:47:44,701] [INFO] - - Model RandomForest trained with best score: 0.868175044031974
+[2025-05-28 17:47:44,701] [INFO] - Training model: KNeighbors
+[2025-05-28 17:47:44,841] [INFO] - - Model KNeighbors trained with best score: 0.8270333739782324
+[2025-05-28 17:47:44,841] [INFO] - Training model: SVC
+[2025-05-28 17:47:45,006] [INFO] - - Model SVC trained with best score: 0.8489590389739421
+[2025-05-28 17:47:45,006] [INFO] - Training model: XGBoost
+[2025-05-28 17:47:50,360] [INFO] - - Model XGBoost trained with best score: 0.8433816556022219
+[2025-05-28 17:47:50,361] [INFO] - Training model: LightGBM
+[2025-05-28 17:47:52,875] [INFO] - - Model LightGBM trained with best score: 0.870929864968613
+[2025-05-28 17:47:52,875] [INFO] - Starting model evaluation
+[2025-05-28 17:47:52,894] [INFO] - - Model RandomForest: Accuracy: 0.9130434782608695, F1 Score: 0.9130434782608695, Precision: 0.9130434782608695, Recall: 0.9130434782608695
+[2025-05-28 17:47:52,905] [INFO] - - Model KNeighbors: Accuracy: 0.8804347826086957, F1 Score: 0.8804347826086957, Precision: 0.8804347826086957, Recall: 0.8804347826086957
+[2025-05-28 17:47:52,916] [INFO] - - Model SVC: Accuracy: 0.8586956521739131, F1 Score: 0.8586956521739131, Precision: 0.8586956521739131, Recall: 0.8586956521739131
+[2025-05-28 17:47:52,931] [INFO] - - Model XGBoost: Accuracy: 0.9130434782608695, F1 Score: 0.9130434782608695, Precision: 0.9130434782608695, Recall: 0.9130434782608695
+[2025-05-28 17:47:52,946] [INFO] - - Model LightGBM: Accuracy: 0.9021739130434783, F1 Score: 0.9021739130434783, Precision: 0.9021739130434783, Recall: 0.9021739130434783
+[2025-05-28 17:47:52,946] [INFO] - Saving the best model to artifacts/model/
+[2025-05-28 17:47:52,980] [INFO] - - Best model saved successfully
+[2025-05-28 17:47:52,980] [INFO] - Model training process completed successfully
+[2025-05-28 17:55:43,587] [INFO] - ------------------------------------------------------
+[2025-05-28 17:55:43,587] [INFO] - Running complete preprocessing pipeline
+[2025-05-28 17:55:43,587] [INFO] - Loading data from artifacts/dataset/glass.csv
+[2025-05-28 17:55:43,590] [INFO] - Starting data preprocessing
+[2025-05-28 17:55:43,592] [INFO] - Splitting object columns into categorical and text columns
+[2025-05-28 17:55:43,592] [INFO] - - Number of categorical columns: 0, categorical columns: []
+[2025-05-28 17:55:43,592] [INFO] - - Number of text columns: 0, text columns: []
+[2025-05-28 17:55:43,592] [INFO] - Skipping removal of outliers as apply_outlier is set to False
+[2025-05-28 17:55:43,592] [INFO] - Handling missing values in the DataFrame
+[2025-05-28 17:55:43,592] [INFO] - - Imputing missing values based on the specified strategy
+[2025-05-28 17:55:43,596] [INFO] - Skipping skewness treatment as apply_skewness is set to False
+[2025-05-28 17:55:43,596] [INFO] - Scaling numeric features in the DataFrame
+[2025-05-28 17:55:43,599] [INFO] - Starting label encoding of categorical columns
+[2025-05-28 17:55:43,599] [INFO] - Label encoding target column: Type
+[2025-05-28 17:55:43,600] [INFO] - Selecting features based on correlation with target variable
+[2025-05-28 17:55:43,601] [INFO] - Skipping variance inflation factor (VIF) calculation as apply_vif is set to False
+[2025-05-28 17:55:43,601] [INFO] - Balancing the dataset using SMOTE
+[2025-05-28 17:55:45,576] [INFO] - Saving data to artifacts/dataset/preprocessed_data.csv
+[2025-05-28 17:55:45,580] [INFO] - Preprocessing completed successfully
+[2025-05-28 17:55:45,580] [INFO] - ------------------------------------------------------
+[2025-05-28 17:55:45,580] [INFO] - Loading data from artifacts/dataset/preprocessed_data.csv
+[2025-05-28 17:55:45,593] [INFO] - Splitting data into training and testing sets
+[2025-05-28 17:55:45,593] [INFO] - Starting model training
+[2025-05-28 17:55:45,593] [INFO] - Training model: RandomForest
+[2025-05-28 17:55:52,145] [INFO] - - Model RandomForest trained with best score: 0.8792237442922375
+[2025-05-28 17:55:52,145] [INFO] - Training model: KNeighbors
+[2025-05-28 17:55:52,329] [INFO] - - Model KNeighbors trained with best score: 0.8297184170471843
+[2025-05-28 17:55:52,329] [INFO] - Training model: SVC
+[2025-05-28 17:55:52,593] [INFO] - - Model SVC trained with best score: 0.8627092846270928
+[2025-05-28 17:55:52,593] [INFO] - Training model: XGBoost
+[2025-05-28 17:56:01,874] [INFO] - - Model XGBoost trained with best score: 0.8489726027397261
+[2025-05-28 17:56:01,874] [INFO] - Training model: LightGBM
+[2025-05-28 17:56:06,451] [INFO] - - Model LightGBM trained with best score: 0.8818873668188736
+[2025-05-28 17:56:06,451] [INFO] - Starting model evaluation
+[2025-05-28 17:56:06,463] [INFO] - - Model RandomForest: Accuracy: 0.9021739130434783, F1 Score: 0.9021739130434783, Precision: 0.9021739130434783, Recall: 0.9021739130434783
+[2025-05-28 17:56:06,480] [INFO] - - Model KNeighbors: Accuracy: 0.8804347826086957, F1 Score: 0.8804347826086957, Precision: 0.8804347826086957, Recall: 0.8804347826086957
+[2025-05-28 17:56:06,498] [INFO] - - Model SVC: Accuracy: 0.8586956521739131, F1 Score: 0.8586956521739131, Precision: 0.8586956521739131, Recall: 0.8586956521739131
+[2025-05-28 17:56:06,512] [INFO] - - Model XGBoost: Accuracy: 0.9347826086956522, F1 Score: 0.9347826086956522, Precision: 0.9347826086956522, Recall: 0.9347826086956522
+[2025-05-28 17:56:06,526] [INFO] - - Model LightGBM: Accuracy: 0.9021739130434783, F1 Score: 0.9021739130434783, Precision: 0.9021739130434783, Recall: 0.9021739130434783
+[2025-05-28 17:56:06,528] [INFO] - Saving the best model to artifacts/model/
+[2025-05-28 17:56:06,535] [INFO] - - Best model saved successfully
+[2025-05-28 17:56:06,535] [INFO] - Model training process completed successfully
+[2025-05-28 17:56:22,959] [INFO] - ------------------------------------------------------
+[2025-05-28 17:56:22,959] [INFO] - Running complete preprocessing pipeline
+[2025-05-28 17:56:22,959] [INFO] - Loading data from artifacts/dataset/glass.csv
+[2025-05-28 17:56:22,959] [INFO] - Starting data preprocessing
+[2025-05-28 17:56:22,959] [INFO] - Splitting object columns into categorical and text columns
+[2025-05-28 17:56:22,959] [INFO] - - Number of categorical columns: 0, categorical columns: []
+[2025-05-28 17:56:22,959] [INFO] - - Number of text columns: 0, text columns: []
+[2025-05-28 17:56:22,959] [INFO] - Skipping removal of outliers as apply_outlier is set to False
+[2025-05-28 17:56:22,959] [INFO] - Handling missing values in the DataFrame
+[2025-05-28 17:56:22,959] [INFO] - - Imputing missing values based on the specified strategy
+[2025-05-28 17:56:22,966] [INFO] - Skipping skewness treatment as apply_skewness is set to False
+[2025-05-28 17:56:22,966] [INFO] - Scaling numeric features in the DataFrame
+[2025-05-28 17:56:22,966] [INFO] - Starting label encoding of categorical columns
+[2025-05-28 17:56:22,966] [INFO] - Label encoding target column: Type
+[2025-05-28 17:56:22,972] [INFO] - Selecting features based on correlation with target variable
+[2025-05-28 17:56:22,973] [INFO] - Skipping variance inflation factor (VIF) calculation as apply_vif is set to False
+[2025-05-28 17:56:22,973] [INFO] - Balancing the dataset using SMOTE
+[2025-05-28 17:56:24,599] [INFO] - Saving data to artifacts/dataset/preprocessed_data.csv
+[2025-05-28 17:56:24,604] [INFO] - Preprocessing completed successfully
+[2025-05-28 17:56:24,604] [INFO] - ------------------------------------------------------
+[2025-05-28 17:56:24,604] [INFO] - Loading data from artifacts/dataset/preprocessed_data.csv
+[2025-05-28 17:56:24,618] [INFO] - Splitting data into training and testing sets
+[2025-05-28 17:56:24,619] [INFO] - Starting model training
+[2025-05-28 17:56:24,619] [INFO] - Training model: RandomForest
+[2025-05-28 17:56:24,619] [ERROR] - Error in training models: GridSearchCV.__init__() got an unexpected keyword argument 'random_state'
+[2025-05-28 17:56:24,619] [ERROR] - Error in model training process: Error in c:\Users\cakir\OneDrive\Belgeler\GitHub\learnify-ml\src\model_training.py , line 96 : GridSearchCV.__init__() got an unexpected keyword argument 'random_state'
+[2025-05-28 17:57:15,098] [INFO] - ------------------------------------------------------
+[2025-05-28 17:57:15,098] [INFO] - Running complete preprocessing pipeline
+[2025-05-28 17:57:15,098] [INFO] - Loading data from artifacts/dataset/glass.csv
+[2025-05-28 17:57:15,098] [INFO] - Starting data preprocessing
+[2025-05-28 17:57:15,098] [INFO] - Splitting object columns into categorical and text columns
+[2025-05-28 17:57:15,098] [INFO] - - Number of categorical columns: 0, categorical columns: []
+[2025-05-28 17:57:15,103] [INFO] - - Number of text columns: 0, text columns: []
+[2025-05-28 17:57:15,103] [INFO] - Skipping removal of outliers as apply_outlier is set to False
+[2025-05-28 17:57:15,103] [INFO] - Handling missing values in the DataFrame
+[2025-05-28 17:57:15,103] [INFO] - - Imputing missing values based on the specified strategy
+[2025-05-28 17:57:15,105] [INFO] - Skipping skewness treatment as apply_skewness is set to False
+[2025-05-28 17:57:15,106] [INFO] - Scaling numeric features in the DataFrame
+[2025-05-28 17:57:15,107] [INFO] - Starting label encoding of categorical columns
+[2025-05-28 17:57:15,107] [INFO] - Label encoding target column: Type
+[2025-05-28 17:57:15,107] [INFO] - Selecting features based on correlation with target variable
+[2025-05-28 17:57:15,107] [INFO] - Skipping variance inflation factor (VIF) calculation as apply_vif is set to False
+[2025-05-28 17:57:15,107] [INFO] - Balancing the dataset using SMOTE
+[2025-05-28 17:57:16,676] [INFO] - Saving data to artifacts/dataset/preprocessed_data.csv
+[2025-05-28 17:57:16,686] [INFO] - Preprocessing completed successfully
+[2025-05-28 17:57:16,686] [INFO] - ------------------------------------------------------
+[2025-05-28 17:57:16,686] [INFO] - Loading data from artifacts/dataset/preprocessed_data.csv
+[2025-05-28 17:57:16,704] [INFO] - Splitting data into training and testing sets
+[2025-05-28 17:57:16,706] [INFO] - Starting model training
+[2025-05-28 17:57:16,706] [INFO] - Training model: RandomForest
+[2025-05-28 17:57:16,706] [ERROR] - Error in training models: Parameter grid for parameter 'n_estimators' needs to be a list or a numpy array, but got <scipy.stats._distn_infrastructure.rv_discrete_frozen object at 0x000002A3F19913D0> (of type rv_discrete_frozen) instead. Single values need to be wrapped in a list with one element.
+[2025-05-28 17:57:16,706] [ERROR] - Error in model training process: Error in c:\Users\cakir\OneDrive\Belgeler\GitHub\learnify-ml\src\model_training.py , line 98 : Parameter grid for parameter 'n_estimators' needs to be a list or a numpy array, but got <scipy.stats._distn_infrastructure.rv_discrete_frozen object at 0x000002A3F19913D0> (of type rv_discrete_frozen) instead. Single values need to be wrapped in a list with one element.
+[2025-05-28 18:07:34,149] [INFO] - ------------------------------------------------------
+[2025-05-28 18:07:34,149] [INFO] - Running complete preprocessing pipeline
+[2025-05-28 18:07:34,149] [INFO] - Loading data from artifacts/dataset/glass.csv
+[2025-05-28 18:07:34,151] [INFO] - Starting data preprocessing
+[2025-05-28 18:07:34,154] [INFO] - Splitting object columns into categorical and text columns
+[2025-05-28 18:07:34,154] [INFO] - - Number of categorical columns: 0, categorical columns: []
+[2025-05-28 18:07:34,154] [INFO] - - Number of text columns: 0, text columns: []
+[2025-05-28 18:07:34,154] [INFO] - Skipping removal of outliers as apply_outlier is set to False
+[2025-05-28 18:07:34,154] [INFO] - Handling missing values in the DataFrame
+[2025-05-28 18:07:34,154] [INFO] - - Imputing missing values based on the specified strategy
+[2025-05-28 18:07:34,156] [INFO] - Skipping skewness treatment as apply_skewness is set to False
+[2025-05-28 18:07:34,157] [INFO] - Scaling numeric features in the DataFrame
+[2025-05-28 18:07:34,159] [INFO] - Starting label encoding of categorical columns
+[2025-05-28 18:07:34,159] [INFO] - Label encoding target column: Type
+[2025-05-28 18:07:34,160] [INFO] - Selecting features based on correlation with target variable
+[2025-05-28 18:07:34,161] [INFO] - Skipping variance inflation factor (VIF) calculation as apply_vif is set to False
+[2025-05-28 18:07:34,161] [INFO] - Balancing the dataset using SMOTE
+[2025-05-28 18:07:35,946] [INFO] - Saving data to artifacts/dataset/preprocessed_data.csv
+[2025-05-28 18:07:35,951] [INFO] - Preprocessing completed successfully
+[2025-05-28 18:07:35,951] [INFO] - ------------------------------------------------------
+[2025-05-28 18:07:35,951] [INFO] - Loading data from artifacts/dataset/preprocessed_data.csv
+[2025-05-28 18:07:35,965] [INFO] - Splitting data into training and testing sets
+[2025-05-28 18:07:35,967] [INFO] - Starting model training
+[2025-05-28 18:07:35,967] [INFO] - Training model: RandomForest
+[2025-05-28 18:07:35,968] [ERROR] - Error in training models: Parameter grid for parameter 'n_estimators' needs to be a list or a numpy array, but got <scipy.stats._distn_infrastructure.rv_discrete_frozen object at 0x000002376D9A6650> (of type rv_discrete_frozen) instead. Single values need to be wrapped in a list with one element.
+[2025-05-28 18:07:35,968] [ERROR] - Error in model training process: Error in c:\Users\cakir\OneDrive\Belgeler\GitHub\learnify-ml\src\model_training.py , line 98 : Parameter grid for parameter 'n_estimators' needs to be a list or a numpy array, but got <scipy.stats._distn_infrastructure.rv_discrete_frozen object at 0x000002376D9A6650> (of type rv_discrete_frozen) instead. Single values need to be wrapped in a list with one element.
+[2025-05-28 18:08:29,562] [INFO] - ------------------------------------------------------
+[2025-05-28 18:08:29,562] [INFO] - Running complete preprocessing pipeline
+[2025-05-28 18:08:29,562] [INFO] - Loading data from artifacts/dataset/glass.csv
+[2025-05-28 18:08:29,564] [INFO] - Starting data preprocessing
+[2025-05-28 18:08:29,565] [INFO] - Splitting object columns into categorical and text columns
+[2025-05-28 18:08:29,566] [INFO] - - Number of categorical columns: 0, categorical columns: []
+[2025-05-28 18:08:29,566] [INFO] - - Number of text columns: 0, text columns: []
+[2025-05-28 18:08:29,566] [INFO] - Skipping removal of outliers as apply_outlier is set to False
+[2025-05-28 18:08:29,566] [INFO] - Handling missing values in the DataFrame
+[2025-05-28 18:08:29,566] [INFO] - - Imputing missing values based on the specified strategy
+[2025-05-28 18:08:29,569] [INFO] - Skipping skewness treatment as apply_skewness is set to False
+[2025-05-28 18:08:29,569] [INFO] - Scaling numeric features in the DataFrame
+[2025-05-28 18:08:29,571] [INFO] - Starting label encoding of categorical columns
+[2025-05-28 18:08:29,571] [INFO] - Label encoding target column: Type
+[2025-05-28 18:08:29,572] [INFO] - Selecting features based on correlation with target variable
+[2025-05-28 18:08:29,572] [INFO] - Skipping variance inflation factor (VIF) calculation as apply_vif is set to False
+[2025-05-28 18:08:29,572] [INFO] - Balancing the dataset using SMOTE
+[2025-05-28 18:08:31,073] [INFO] - Saving data to artifacts/dataset/preprocessed_data.csv
+[2025-05-28 18:08:31,078] [INFO] - Preprocessing completed successfully
+[2025-05-28 18:08:31,078] [INFO] - ------------------------------------------------------
+[2025-05-28 18:08:31,078] [INFO] - Loading data from artifacts/dataset/preprocessed_data.csv
+[2025-05-28 18:08:31,092] [INFO] - Splitting data into training and testing sets
+[2025-05-28 18:08:31,093] [INFO] - Starting model training
+[2025-05-28 18:08:31,093] [INFO] - Training model: RandomForest
+[2025-05-28 18:09:08,609] [INFO] - - Model RandomForest trained with best score: 0.8874809741248096
+[2025-05-28 18:09:08,609] [INFO] - Training model: KNeighbors
+[2025-05-28 18:09:08,817] [INFO] - - Model KNeighbors trained with best score: 0.8407153729071538
+[2025-05-28 18:09:08,818] [INFO] - Training model: SVC
+[2025-05-28 18:09:08,972] [INFO] - - Model SVC trained with best score: 0.8764459665144597
+[2025-05-28 18:09:08,972] [INFO] - Training model: XGBoost
+[2025-05-28 18:09:27,816] [INFO] - - Model XGBoost trained with best score: 0.8544520547945205
+[2025-05-28 18:09:27,816] [INFO] - Training model: LightGBM
+[2025-05-28 18:09:38,303] [INFO] - - Model LightGBM trained with best score: 0.8901065449010656
+[2025-05-28 18:09:38,303] [INFO] - Starting model evaluation
+[2025-05-28 18:09:38,319] [INFO] - - Model RandomForest: Accuracy: 0.9130434782608695, F1 Score: 0.9130434782608695, Precision: 0.9130434782608695, Recall: 0.9130434782608695
+[2025-05-28 18:09:38,329] [INFO] - - Model KNeighbors: Accuracy: 0.8586956521739131, F1 Score: 0.8586956521739131, Precision: 0.8586956521739131, Recall: 0.8586956521739131
+[2025-05-28 18:09:38,339] [INFO] - - Model SVC: Accuracy: 0.8586956521739131, F1 Score: 0.8586956521739131, Precision: 0.8586956521739131, Recall: 0.8586956521739131
+[2025-05-28 18:09:38,353] [INFO] - - Model XGBoost: Accuracy: 0.8804347826086957, F1 Score: 0.8804347826086957, Precision: 0.8804347826086957, Recall: 0.8804347826086957
+[2025-05-28 18:09:38,365] [INFO] - - Model LightGBM: Accuracy: 0.9239130434782609, F1 Score: 0.9239130434782609, Precision: 0.9239130434782609, Recall: 0.9239130434782609
+[2025-05-28 18:09:38,365] [INFO] - Saving the best model to artifacts/model/
+[2025-05-28 18:09:38,391] [INFO] - - Best model saved successfully
+[2025-05-28 18:09:38,391] [INFO] - Model training process completed successfully
+[2025-05-28 18:31:47,653] [INFO] - ------------------------------------------------------
+[2025-05-28 18:31:47,654] [INFO] - Running complete preprocessing pipeline
+[2025-05-28 18:31:47,654] [INFO] - Loading data from artifacts/dataset/glass.csv
+[2025-05-28 18:31:47,654] [INFO] - Starting data preprocessing
+[2025-05-28 18:31:47,654] [INFO] - Splitting object columns into categorical and text columns
+[2025-05-28 18:31:47,654] [INFO] - - Number of categorical columns: 0, categorical columns: []
+[2025-05-28 18:31:47,654] [INFO] - - Number of text columns: 0, text columns: []
+[2025-05-28 18:31:47,654] [INFO] - Skipping removal of outliers as apply_outlier is set to False
+[2025-05-28 18:31:47,654] [INFO] - Handling missing values in the DataFrame
+[2025-05-28 18:31:47,654] [INFO] - - Imputing missing values based on the specified strategy
+[2025-05-28 18:31:47,660] [INFO] - Skipping skewness treatment as apply_skewness is set to False
+[2025-05-28 18:31:47,661] [INFO] - Scaling numeric features in the DataFrame
+[2025-05-28 18:31:47,664] [INFO] - Starting label encoding of categorical columns
+[2025-05-28 18:31:47,664] [INFO] - Label encoding target column: Type
+[2025-05-28 18:31:47,665] [INFO] - Selecting features based on correlation with target variable
+[2025-05-28 18:31:47,666] [INFO] - Skipping variance inflation factor (VIF) calculation as apply_vif is set to False
+[2025-05-28 18:31:47,666] [INFO] - Balancing the dataset using SMOTE
+[2025-05-28 18:31:49,616] [INFO] - Saving data to artifacts/dataset/preprocessed_data.csv
+[2025-05-28 18:31:49,621] [INFO] - Preprocessing completed successfully
+[2025-05-28 18:31:49,621] [INFO] - ------------------------------------------------------
+[2025-05-28 18:31:49,622] [INFO] - Loading data from artifacts/dataset/preprocessed_data.csv
+[2025-05-28 18:31:49,636] [INFO] - Splitting data into training and testing sets
+[2025-05-28 18:31:49,636] [INFO] - Starting model training with grid hyperparameter tuning
+[2025-05-28 18:31:49,636] [INFO] - - Training model: RandomForest
+[2025-05-28 18:32:28,388] [INFO] - - - Model RandomForest trained with best score: 0.8874809741248096
+[2025-05-28 18:32:28,388] [INFO] - - Training model: KNeighbors
+[2025-05-28 18:32:28,605] [INFO] - - - Model KNeighbors trained with best score: 0.8407153729071538
+[2025-05-28 18:32:28,605] [INFO] - - Training model: SVC
+[2025-05-28 18:32:28,797] [INFO] - - - Model SVC trained with best score: 0.8764459665144597
+[2025-05-28 18:32:28,797] [INFO] - - Training model: XGBoost
+[2025-05-28 18:32:53,705] [INFO] - - - Model XGBoost trained with best score: 0.8544520547945205
+[2025-05-28 18:32:53,705] [INFO] - - Training model: LightGBM
+[2025-05-28 18:33:05,444] [INFO] - - - Model LightGBM trained with best score: 0.8901065449010656
+[2025-05-28 18:33:05,444] [INFO] - Starting model evaluation
+[2025-05-28 18:33:05,471] [INFO] - - Model RandomForest: Accuracy: 0.9130434782608695, F1 Score: 0.9130434782608695, Precision: 0.9130434782608695, Recall: 0.9130434782608695
+[2025-05-28 18:33:05,487] [INFO] - - Model KNeighbors: Accuracy: 0.8586956521739131, F1 Score: 0.8586956521739131, Precision: 0.8586956521739131, Recall: 0.8586956521739131
+[2025-05-28 18:33:05,498] [INFO] - - Model SVC: Accuracy: 0.8586956521739131, F1 Score: 0.8586956521739131, Precision: 0.8586956521739131, Recall: 0.8586956521739131
+[2025-05-28 18:33:05,515] [INFO] - - Model XGBoost: Accuracy: 0.8804347826086957, F1 Score: 0.8804347826086957, Precision: 0.8804347826086957, Recall: 0.8804347826086957
+[2025-05-28 18:33:05,530] [INFO] - - Model LightGBM: Accuracy: 0.9239130434782609, F1 Score: 0.9239130434782609, Precision: 0.9239130434782609, Recall: 0.9239130434782609
+[2025-05-28 18:33:05,531] [INFO] - Saving data to artifacts/model/model_evaluation_results.csv
+[2025-05-28 18:33:05,532] [INFO] - Saving the best model to artifacts/model/
+[2025-05-28 18:33:05,554] [INFO] - - Best model saved successfully
+[2025-05-28 18:33:05,554] [INFO] - Model training process completed successfully
