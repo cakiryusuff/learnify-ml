@@ -4,6 +4,26 @@ from sklearn.svm import SVC
 from xgboost import XGBClassifier
 from lightgbm import LGBMClassifier
 from scipy.stats import randint, uniform
+from sklearn.model_selection import RandomizedSearchCV, GridSearchCV
+
+search_methods_params = {
+    "randomized": {
+        "n_iter": 10,
+        "cv": 5,
+        "scoring": "accuracy",
+        "random_state": 42
+    },
+    "grid": {
+        "cv": 5,
+        "scoring": "accuracy"
+    }
+}
+
+search_methods = {
+    "randomized": RandomizedSearchCV,
+    "grid": GridSearchCV
+}
+
 
 models = {
     "RandomForest": RandomForestClassifier(),
@@ -14,7 +34,33 @@ models = {
 }
 
 params = {
-    "RandomForest": {
+    "grid": {
+        "RandomForest": {
+            "n_estimators": [100, 200, 300],
+            "max_depth": [5, 10, 15, 20],
+            "min_samples_split": [2, 5, 10]
+        },
+        "KNeighbors": {
+            "n_neighbors": [3, 5, 7, 9, 11],
+            "weights": ["uniform", "distance"]
+        },
+        "SVC": {
+            "C": [0.1, 1, 10],
+            "kernel": ["linear", "rbf"]
+        },
+        "XGBoost": {
+            "n_estimators": [100, 200],
+            "max_depth": [3, 5, 7],
+            "learning_rate": [0.01, 0.1, 0.2]
+        },
+        "LightGBM": {
+            "n_estimators": [100, 200],
+            "max_depth": [3, 5, 7],
+            "learning_rate": [0.01, 0.1, 0.2]
+        }
+    },
+    "randomized": {
+        "RandomForest":{
         "n_estimators": randint(50, 200),
         "max_depth": randint(5, 20),
         "min_samples_split": randint(2, 10)
@@ -36,5 +82,5 @@ params = {
         "n_estimators": randint(50, 200),
         "max_depth": randint(3, 10),
         "learning_rate": uniform(0.01, 0.3)
-    }
+    }}
 }
