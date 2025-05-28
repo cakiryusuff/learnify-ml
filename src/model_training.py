@@ -3,11 +3,12 @@ from utils.common_functions import load_data, save_data
 from src.custom_exception import CustomException
 from src.logger import get_logger
 from config.config_paths import *
-from config.model_config import models, params
+from config.model_config import models, params, search_methods, search_methods_params
+from typing import Literal
 import os
 
 from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score, classification_report
-from sklearn.model_selection import train_test_split, RandomizedSearchCV
+from sklearn.model_selection import train_test_split, RandomizedSearchCV, GridSearchCV
 from sklearn.ensemble import RandomForestClassifier
 
 logger = get_logger(__name__)
@@ -30,6 +31,7 @@ class ModelTrainer:
     use_case (str) : The type of machine learning task (e.g., "classification", "regression", "clustering").
     test_size (float) : The proportion of the data to use for testing.
     random_state (int) : The random state for reproducibility.
+    hyperparameter_tuning_method (Literal["randomized", "grid"]) : The method to use for hyperparameter tuning.
     """
     def __init__(self, target_column: str = ...,
                  data_path: str = DATA_PREPROCESSING_OUTPUT,
@@ -40,7 +42,9 @@ class ModelTrainer:
                  apply_hyperparameter_tuning: bool = False,
                  use_case: str = "classification", # TODO: Regression and clustering will be added
                  test_size: float = 0.2,
-                 random_state: int = 42):
+                 random_state: int = 42,
+                 hyperparameter_tuning_method: Literal["randomized", "grid"] = "randomized"
+                 ):
         
         self.target_column = target_column
         self.data_path = data_path
@@ -52,11 +56,12 @@ class ModelTrainer:
         self.use_case = use_case
         self.test_size = test_size
         self.random_state = random_state
+        self.hyperparameter_tuning_method = hyperparameter_tuning_method
+        self.is_multiclass = None
         
         os.makedirs(os.path.dirname(self.model_save_path), exist_ok=True)
         
     def split_train_test(self, df: pd.DataFrame):
-        # TODO: Add more robust splitting logic if needed (e.g., stratified split)
         """
         Split the DataFrame into training and testing sets.
         
@@ -70,6 +75,8 @@ class ModelTrainer:
             logger.info("Splitting data into training and testing sets")
             X = df.drop(self.target_column, axis=1)
             y = df[self.target_column]
+            if self.use_case == "classification":
+                self.is_multiclass = "micro" if len(y.unique()) > 2 else "binary"
             X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=self.test_size, random_state=self.random_state)
             return X_train, X_test, y_train, y_test
         except Exception as e:
@@ -77,21 +84,22 @@ class ModelTrainer:
             raise CustomException(e, "Error in splitting data")
         
     def train_models(self, X_train, y_train) -> dict:
-        # TODO: Add more models and hyperparameters as needed
         try:
             if self.apply_hyperparameter_tuning:
-                logger.info("Starting model training")
+                logger.info(f"Starting model training with {self.hyperparameter_tuning_method} hyperparameter tuning")
                 results = {}
                 for name, model in models.items():
-                    logger.info(f"Training model: {name}")
-                    search = RandomizedSearchCV(model, params[name], n_iter=10, cv=3, scoring='accuracy', random_state=self.random_state)
+                    logger.info(f"- Training model: {name}")
+                    search_class = search_methods[self.hyperparameter_tuning_method]
+                    search_class_params = search_methods_params[self.hyperparameter_tuning_method]
+                    search = search_class(model, params[self.hyperparameter_tuning_method][name], **search_class_params)
                     search.fit(X_train, y_train)
                     results[name] = {
                         "best_model": search.best_estimator_,
                         "best_score": search.best_score_,
                         "best_params": search.best_params_
                     }
-                    logger.info(f"- Model {name} trained with best score: {search.best_score_}")
+                    logger.info(f"- - Model {name} trained with best score: {search.best_score_}")
                 return results
             else:
                 logger.info(f"Starting Single Model Training {str(self.model)}")
@@ -106,14 +114,21 @@ class ModelTrainer:
     def evaluate_models(self, results, X_test, y_test):
         try:
             logger.info("Starting model evaluation")
+            data_csv = pd.DataFrame(columns=["model", "accuracy", "f1_score", "precision", "recall"])
             evaluation_results = {}
+            
             for name, result in results.items():
                 best_model = result["best_model"]
                 y_pred = best_model.predict(X_test)
+                
                 accuracy = accuracy_score(y_test, y_pred)
-                f1 = f1_score(y_test, y_pred)
-                precision = precision_score(y_test, y_pred)
-                recall = recall_score(y_test, y_pred)
+                
+                f1 = f1_score(y_test, y_pred, average=self.is_multiclass)
+                
+                precision = precision_score(y_test, y_pred, average=self.is_multiclass)
+                
+                recall = recall_score(y_test, y_pred, average=self.is_multiclass)
+                
                 report = classification_report(y_test, y_pred)
                 
                 evaluation_results[name] = {
@@ -124,7 +139,14 @@ class ModelTrainer:
                     "classification_report": report
                 }
                 
+                data_csv.loc[-1] = [name, accuracy, f1, precision, recall]
+                data_csv.index = data_csv.index + 1  # Shift index
+                data_csv = data_csv.sort_index()
+                
                 logger.info(f"- Model {name}: Accuracy: {accuracy}, F1 Score: {f1}, Precision: {precision}, Recall: {recall}")
+                
+            save_data(data_csv, self.model_save_path + "model_evaluation_results.csv")
+            
             return evaluation_results
         except Exception as e:
             logger.error(f"Error in evaluating models: {e}")
@@ -150,15 +172,17 @@ class ModelTrainer:
         try:
             logger.info("------------------------------------------------------")            
             df = load_data(self.data_path)
+            
             X_train, X_test, y_train, y_test = self.split_train_test(df)
+            
             results = self.train_models(X_train, y_train)
+            
             evaluation_results = self.evaluate_models(results, X_test, y_test)
             
             best_model_name = max(evaluation_results, key=lambda x: evaluation_results[x]['accuracy'])
             best_model = results[best_model_name]["best_model"]
             self.save_best_model(best_model, best_model_name)
             
-            # logger.info(f"Best model: {best_model_name} with accuracy: {evaluation_results[best_model_name]['accuracy']}")
             logger.info("Model training process completed successfully")
             
         except Exception as e:
