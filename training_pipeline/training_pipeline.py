@@ -23,6 +23,7 @@ class AutoMLPipeline:
     apply_outlier (bool): Whether to apply outlier detection or not.
     apply_vif (bool): Whether to apply VIF (Variance Inflation Factor) or not.
     apply_skewness (bool): Whether to apply skewness detection or not.
+    encode_target_column (bool): Whether to encode the target column or not.
     model_save_path (str) : The path to save the trained models.
     model (sklearn model) : The default model to be trained if hyperparameter tuning is not applied.
     models_list (dict) : A dictionary of models to be used for Hyperparameter Tuning and trained (e.g., {"RandomForest": RandomForestClassifier(), "KNeighbors": KNeighborsClassifier()}).
@@ -49,11 +50,13 @@ class AutoMLPipeline:
                 apply_skewness: bool = False,
                 apply_scale: bool = True,
                 apply_smote: bool = True,
+                encode_target_column: bool = False,
                 
                 model = RandomForestClassifier(),
                 models_list: dict = models,
                 params_list: dict = params,
                 apply_hyperparameter_tuning: bool = False,
+                hyperparameter_tuning_method: Literal["randomized", "grid"] = "randomized"
                 ):
         
         self.target_column = target_column
@@ -74,6 +77,8 @@ class AutoMLPipeline:
         self.model = model
         self.models_list = models_list
         self.params_list = params_list
+        self.encode_target_column = encode_target_column
+        self.hyperparameter_tuning_method = hyperparameter_tuning_method
         
     def run_pipeline(self):
         """
@@ -89,6 +94,7 @@ class AutoMLPipeline:
                                         self.apply_outlier,
                                         self.apply_vif,
                                         self.apply_skewness,
+                                        self.encode_target_column
                                         )
         preprocessor.run_preprocessing()
 
@@ -101,5 +107,7 @@ class AutoMLPipeline:
                                self.apply_hyperparameter_tuning,
                                self.use_case,
                                self.test_size,
-                               self.random_state)
+                               self.random_state,
+                               self.hyperparameter_tuning_method
+                               )
         trainer.run_training()
