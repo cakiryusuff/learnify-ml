@@ -12,12 +12,6 @@ license = "MIT"
 authors = [
     { name = "Yusuf Çakır" }
 ]
-
-[project.urls]
-Homepage = "https://github.com/cakiryusuff/learnify-ml"
-Issues = "https://github.com/cakiryusuff/learnify-ml/issues"
-
-[project]
 dependencies = [
     "numpy==1.26.4",
     "pandas==1.5.3",
@@ -27,6 +21,13 @@ dependencies = [
     "imbalanced-learn",
     "statsmodels"
 ]
+classifiers = [
+  "Programming Language :: Python"
+]
+
+[project.urls]
+Homepage = "https://github.com/cakiryusuff/learnify-ml"
+Issues = "https://github.com/cakiryusuff/learnify-ml/issues"
 
 [tool.setuptools.packages.find]
 where = ["."]
