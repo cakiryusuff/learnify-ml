@@ -32,29 +32,29 @@ class DataPreprocessor():
     """
     
     def __init__(self, 
-                 target_column: str = ...,
-                 data_path: str | None = DATA_PREPROCESSING_INPUT,
-                 data_output_path: str | None = DATA_PREPROCESSING_OUTPUT,
-                 impute_strategy: Literal["mean", "median", "most_frequent"] = "mean",
-                 impute_strategy_remove: Literal["column", "row", None] = None,
-                 apply_smote: bool = True,
-                 apply_scale: bool = False,
-                 apply_outlier: bool = False,
-                 apply_vif: bool = False,
-                 apply_skewness: bool = False,
-                 encode_target_column: bool = False):
+                target_column: str = ...,
+                data_path: str | None = DATA_PREPROCESSING_INPUT,
+                data_output_path: str | None = DATA_PREPROCESSING_OUTPUT,
+                impute_strategy: Literal["mean", "median", "most_frequent"] = "mean",
+                impute_strategy_remove: Literal["column", "row", None] = None,
+                apply_scale: bool = False,
+                apply_skewness: bool = False,
+                encode_target_column: bool = False,
+                apply_outlier: bool = False,
+                apply_vif: bool = False,
+                apply_smote: bool = True):
         
-        self.impute_strategy = impute_strategy
-        self.impute_strategy_remove = impute_strategy_remove
-        self.apply_scale = apply_scale
         self.target_column = target_column
         self.data_path = data_path
         self.data_output_path = data_output_path
-        self.apply_vif = apply_vif
-        self.apply_outlier = apply_outlier
-        self.apply_smote = apply_smote
+        self.impute_strategy = impute_strategy
+        self.impute_strategy_remove = impute_strategy_remove
+        self.apply_scale = apply_scale
         self.apply_skewness = apply_skewness
         self.encode_target_column = encode_target_column
+        self.apply_outlier = apply_outlier
+        self.apply_vif = apply_vif
+        self.apply_smote = apply_smote
 
     def preprocess_data(self, df: pd.DataFrame) -> pd.DataFrame:
         try:

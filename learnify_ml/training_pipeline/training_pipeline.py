@@ -14,21 +14,22 @@ class AutoMLPipeline:
     ----------
     
     target_column (str) : The name of the target column in the dataset.
-    data_path (str): The path to the input dataset.
-    data_output_path (str): The path where the preprocessed dataset will be saved.
-    impute_strategy (str): The strategy to use for imputation (e.g., 'mean', 'median', 'most_frequent').
-    impute_strategy_remove (str): The strategy to use for imputation (e.g., 'column', 'row', None).
-    apply_smote (bool): Whether to apply SMOTE (Synthetic Minority Over-sampling Technique) or not.
-    apply_scale (bool): Whether to apply scaling or not.
-    apply_outlier (bool): Whether to apply outlier detection or not.
-    apply_vif (bool): Whether to apply VIF (Variance Inflation Factor) or not.
-    apply_skewness (bool): Whether to apply skewness detection or not.
+    data_path (str) : The path to the input dataset.
+    data_output_path (str) : The path where the preprocessed dataset will be saved.
+    impute_strategy (str) : The strategy to use for imputation (e.g., 'mean', 'median', 'most_frequent').
+    impute_strategy_remove (str) : The strategy to use for imputation (e.g., 'column', 'row', None).
+    apply_smote (bool) : Whether to apply SMOTE (Synthetic Minority Over-sampling Technique) or not.
+    apply_scale (bool) : Whether to apply scaling or not.
+    apply_outlier (bool) : Whether to apply outlier detection or not.
+    apply_vif (bool) : Whether to apply VIF (Variance Inflation Factor) or not.
+    apply_skewness (bool) : Whether to apply skewness detection or not.
     encode_target_column (bool): Whether to encode the target column or not.
     model_save_path (str) : The path to save the trained models.
     model (sklearn model) : The default model to be trained if hyperparameter tuning is not applied.
     models_list (dict) : A dictionary of models to be used for Hyperparameter Tuning and trained (e.g., {"RandomForest": RandomForestClassifier(), "KNeighbors": KNeighborsClassifier()}).
     params_list (dict) : A dictionary of hyperparameters for each model {"RandomForest": {"n_estimators": [100, 200]}, "KNeighbors": {"n_neighbors": [3, 5]}}.
     apply_hyperparameter_tuning (bool) : Whether to apply hyperparameter tuning or not.
+    hyperparameter_tuning_method (str) : The method to use for hyperparameter tuning (e.g., "randomized", "grid").
     use_case (str) : The type of machine learning task (e.g., "classification", "regression", "clustering").
     test_size (float) : The proportion of the data to use for testing.
     random_state (int) : The random state for reproducibility.

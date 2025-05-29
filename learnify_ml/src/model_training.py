@@ -8,7 +8,7 @@ from typing import Literal
 import os
 
 from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score, classification_report
-from sklearn.model_selection import train_test_split, RandomizedSearchCV, GridSearchCV
+from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 
 logger = get_logger(__name__)
@@ -33,31 +33,33 @@ class ModelTrainer:
     random_state (int) : The random state for reproducibility.
     hyperparameter_tuning_method (Literal["randomized", "grid"]) : The method to use for hyperparameter tuning.
     """
-    def __init__(self, target_column: str = ...,
-                 data_path: str = DATA_PREPROCESSING_OUTPUT,
-                 model_save_path: str = MODEL_SAVE_PATH,
-                 model = RandomForestClassifier(),
-                 models_list: dict = models,
-                 params_list: dict = params,
-                 apply_hyperparameter_tuning: bool = False,
-                 use_case: str = "classification", # TODO: Regression and clustering will be added
-                 test_size: float = 0.2,
-                 random_state: int = 42,
-                 hyperparameter_tuning_method: Literal["randomized", "grid"] = "randomized"
-                 ):
+    def __init__(self,
+                target_column: str,
+                use_case: str = "classification",  # e.g., classification, regression
+                model = RandomForestClassifier(),
+                models_list: dict = models,
+                params_list: dict = params,
+                apply_hyperparameter_tuning: bool = False,
+                hyperparameter_tuning_method: Literal["randomized", "grid"] = "randomized",
+                data_path: str = DATA_PREPROCESSING_OUTPUT,
+                model_save_path: str = MODEL_SAVE_PATH,
+                test_size: float = 0.2,
+                random_state: int = 42,
+                ):
         
         self.target_column = target_column
-        self.data_path = data_path
-        self.model_save_path = model_save_path
+        self.use_case = use_case
         self.model = model
         self.models = models_list
         self.params = params_list
         self.apply_hyperparameter_tuning = apply_hyperparameter_tuning
-        self.use_case = use_case
+        self.hyperparameter_tuning_method = hyperparameter_tuning_method
+        self.data_path = data_path
+        self.model_save_path = model_save_path
         self.test_size = test_size
         self.random_state = random_state
-        self.hyperparameter_tuning_method = hyperparameter_tuning_method
         self.is_multiclass = None
+
         
         os.makedirs(os.path.dirname(self.model_save_path), exist_ok=True)
         
