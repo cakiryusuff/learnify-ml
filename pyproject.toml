@@ -7,7 +7,7 @@ name = "learnify_ml"
 version = "0.0.6"
 description = "A package for auto preprocessing and training machine learning models"
 readme = "README.md"
-requires-python = ">=3.8"
+requires-python = ">=3.11"
 license = "MIT"
 authors = [
     { name = "Yusuf Çakır" }
