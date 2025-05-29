@@ -8,7 +8,7 @@ version = "0.0.6"
 description = "A package for auto preprocessing and training machine learning models"
 readme = "README.md"
 requires-python = ">=3.7"
-license = MIT
+license = "MIT"
 authors = [
     { name = "Yusuf Çakır" }
 ]
