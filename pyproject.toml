@@ -14,7 +14,7 @@ authors = [
 ]
 
 [project.urls]
-"Homepage" = "https://github.com/cakiryusuff/learnify-ml",
+Homepage = "https://github.com/cakiryusuff/learnify-ml"
 Issues = "https://github.com/cakiryusuff/learnify-ml/issues"
 
 [project]
