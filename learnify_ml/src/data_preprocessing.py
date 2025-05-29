@@ -19,7 +19,7 @@ class DataPreprocessor():
     Parameters
     ----------
     
-    target_column (str) : The name of the target column in the dataset.
+    target_column (str) : The name of the target column in the dataset
     data_path (str): The path to the input dataset.
     data_output_path (str): The path where the preprocessed dataset will be saved.
     impute_strategy (str): The strategy to use for imputation (e.g., 'mean', 'median', 'most_frequent').
