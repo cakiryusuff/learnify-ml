@@ -85,30 +85,35 @@ class AutoMLPipeline:
         """
         Runs the entire AutoML pipeline including data preprocessing and model training.
         """
-        preprocessor = DataPreprocessor(self.target_column,
-                                        self.data_path,
-                                        self.data_output_path,
-                                        self.impute_strategy,
-                                        self.impute_strategy_remove,
-                                        self.apply_smote,
-                                        self.apply_scale,
-                                        self.apply_outlier,
-                                        self.apply_vif,
-                                        self.apply_skewness,
-                                        self.encode_target_column
-                                        )
+        
+        preprocessor = DataPreprocessor(
+            target_column=self.target_column,
+            data_path=self.data_path,
+            data_output_path=self.data_output_path,
+            impute_strategy=self.impute_strategy,
+            impute_strategy_remove=self.impute_strategy_remove,
+            apply_smote=self.apply_smote,
+            apply_scale=self.apply_scale,
+            apply_outlier=self.apply_outlier,
+            apply_vif=self.apply_vif,
+            apply_skewness=self.apply_skewness,
+            encode_target_column=self.encode_target_column
+        )
+        
         preprocessor.run_preprocessing()
 
-        trainer = ModelTrainer(self.target_column,
-                               self.data_output_path,
-                               self.model_save_path,
-                               self.model,
-                               self.models_list,
-                               self.params_list,
-                               self.apply_hyperparameter_tuning,
-                               self.use_case,
-                               self.test_size,
-                               self.random_state,
-                               self.hyperparameter_tuning_method
-                               )
+        trainer = ModelTrainer(
+            target_column=self.target_column,
+            use_case=self.use_case,
+            data_path=self.data_output_path,
+            model_save_path=self.model_save_path,
+            model=self.model,
+            models_list=self.models_list,
+            params_list=self.params_list,
+            apply_hyperparameter_tuning=self.apply_hyperparameter_tuning,
+            hyperparameter_tuning_method=self.hyperparameter_tuning_method,
+            test_size=self.test_size,
+            random_state=self.random_state
+        )
+        
         trainer.run_training()
