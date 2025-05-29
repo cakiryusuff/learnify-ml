@@ -1,0 +1,33 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "learnify_ml"
+version = "0.0.6"
+description = "A package for auto preprocessing and training machine learning models"
+readme = "README.md"
+requires-python = ">=3.11"
+license = "MIT"
+authors = [
+    { name = "Yusuf Çakır" }
+]
+dependencies = [
+    "numpy==1.26.4",
+    "pandas==1.5.3",
+    "scikit-learn",
+    "lightgbm",
+    "xgboost",
+    "imbalanced-learn",
+    "statsmodels"
+]
+classifiers = [
+  "Programming Language :: Python"
+]
+
+[project.urls]
+Homepage = "https://github.com/cakiryusuff/learnify-ml"
+Issues = "https://github.com/cakiryusuff/learnify-ml/issues"
+
+[tool.setuptools.packages.find]
+where = ["."]
