@@ -4,8 +4,9 @@ __pycache__/
 /build
 /dist
 /learnify_ml.egg-info
-artifacts/dataset/*
-artifacts/model/*
+learnify_ml/artifacts/dataset/*
+learnify_ml/artifacts/model/*
 logs/*
 deneme.py
 venv/
+/logs

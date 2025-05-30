@@ -1,14 +1,16 @@
 import pandas as pd
+from learnify_ml.src.model_training_engine import ModelTrainingEngine
 from learnify_ml.utils.common_functions import load_data, save_data
 from learnify_ml.src.custom_exception import CustomException
 from learnify_ml.src.logger import get_logger
 from learnify_ml.config.config_paths import *
-from learnify_ml.config.model_config import models, params, search_methods, search_methods_params
+from learnify_ml.config.model_config import default_models, default_params, default_search_methods, default_search_methods_params
 from typing import Literal
 import os
+from tqdm import tqdm
 
 from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score, classification_report
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import train_test_split, KFold, cross_val_score
 from sklearn.ensemble import RandomForestClassifier
 
 logger = get_logger(__name__)
@@ -37,21 +39,27 @@ class ModelTrainer:
                 target_column: str,
                 use_case: str = "classification",  # e.g., classification, regression
                 model = RandomForestClassifier(),
-                models_list: dict = models,
-                params_list: dict = params,
+                models_list: dict = None,
+                params_list: dict = None,
                 apply_hyperparameter_tuning: bool = False,
                 hyperparameter_tuning_method: Literal["randomized", "grid"] = "randomized",
                 data_path: str = DATA_PREPROCESSING_OUTPUT,
                 model_save_path: str = MODEL_SAVE_PATH,
                 test_size: float = 0.2,
                 random_state: int = 42,
+                search_methods: dict = None,
+                search_methods_params: dict = None
                 ):
         
         self.target_column = target_column
+        
+        if self.target_column is None:
+            raise ValueError("target_column must be specified")
+        
         self.use_case = use_case
         self.model = model
-        self.models = models_list
-        self.params = params_list
+        self.models = models_list or default_models
+        self.params = params_list or default_params
         self.apply_hyperparameter_tuning = apply_hyperparameter_tuning
         self.hyperparameter_tuning_method = hyperparameter_tuning_method
         self.data_path = data_path
@@ -59,6 +67,8 @@ class ModelTrainer:
         self.test_size = test_size
         self.random_state = random_state
         self.is_multiclass = None
+        self.search_methods = search_methods or default_search_methods
+        self.search_methods_params = search_methods_params or default_search_methods_params
 
         
         os.makedirs(os.path.dirname(self.model_save_path), exist_ok=True)
@@ -85,33 +95,55 @@ class ModelTrainer:
             logger.error(f"Error in splitting data: {e}")
             raise CustomException(e, "Error in splitting data")
         
-    def train_models(self, X_train, y_train) -> dict:
+    def train_models(self, X_train, y_train):
         try:
-            if self.apply_hyperparameter_tuning:
-                logger.info(f"Starting model training with {self.hyperparameter_tuning_method} hyperparameter tuning")
-                results = {}
-                for name, model in models.items():
-                    logger.info(f"- Training model: {name}")
-                    search_class = search_methods[self.hyperparameter_tuning_method]
-                    search_class_params = search_methods_params[self.hyperparameter_tuning_method]
-                    search = search_class(model, params[self.hyperparameter_tuning_method][name], **search_class_params)
-                    search.fit(X_train, y_train)
-                    results[name] = {
-                        "best_model": search.best_estimator_,
-                        "best_score": search.best_score_,
-                        "best_params": search.best_params_
-                    }
-                    logger.info(f"- - Model {name} trained with best score: {search.best_score_}")
-                return results
-            else:
-                logger.info(f"Starting Single Model Training {str(self.model)}")
-                results = {"single_model": {"best_model": self.model, "best_score": None, "best_params": None}}
-                self.model.fit(X_train, y_train)
-                return results
-                
+            logger.info("Model training process started")
+
+            engine = ModelTrainingEngine(
+                models=self.models,
+                params=self.params,
+                model=self.model,
+                apply_hyperparameter_tuning=self.apply_hyperparameter_tuning,
+                hyperparameter_tuning_method=self.hyperparameter_tuning_method,
+                search_methods=self.search_methods,
+                search_methods_params=self.search_methods_params,
+                random_state=self.random_state
+            )
+
+            return engine.train(X_train, y_train)
+
         except Exception as e:
             logger.error(f"Error in training models: {e}")
             raise CustomException(e, "Error in training models")
+    
+    def get_metrics(self, y_true, y_pred, average):
+        """
+        Calculate and return evaluation metrics for the model.
+        
+        Parameters:
+        y_true (array-like): True labels.
+        y_pred (array-like): Predicted labels.
+        
+        Returns:
+        dict: A dictionary containing accuracy, f1_score, precision, and recall.
+        """
+        try:
+            accuracy = accuracy_score(y_true, y_pred)
+            f1 = f1_score(y_true, y_pred, average=average)
+            precision = precision_score(y_true, y_pred, average=average)
+            recall = recall_score(y_true, y_pred, average=average)
+            report = classification_report(y_true, y_pred)
+            
+            return {
+                "accuracy": accuracy,
+                "f1_score": f1,
+                "precision": precision,
+                "recall": recall,
+                "classification_report": report
+            }
+        except Exception as e:
+            logger.error(f"Error in calculating metrics: {e}")
+            raise CustomException(e, "Error in calculating metrics")
         
     def evaluate_models(self, results, X_test, y_test):
         try:
@@ -122,30 +154,16 @@ class ModelTrainer:
             for name, result in results.items():
                 best_model = result["best_model"]
                 y_pred = best_model.predict(X_test)
+            
+                metrics = self.get_metrics(y_test, y_pred, self.is_multiclass)
                 
-                accuracy = accuracy_score(y_test, y_pred)
+                evaluation_results[name] = metrics
                 
-                f1 = f1_score(y_test, y_pred, average=self.is_multiclass)
-                
-                precision = precision_score(y_test, y_pred, average=self.is_multiclass)
-                
-                recall = recall_score(y_test, y_pred, average=self.is_multiclass)
-                
-                report = classification_report(y_test, y_pred)
-                
-                evaluation_results[name] = {
-                    "accuracy": accuracy,
-                    "f1_score": f1,
-                    "precision": precision,
-                    "recall": recall,
-                    "classification_report": report
-                }
-                
-                data_csv.loc[-1] = [name, accuracy, f1, precision, recall]
+                data_csv.loc[-1] = [name, metrics["accuracy"], metrics["f1_score"], metrics["precision"], metrics["recall"]]
                 data_csv.index = data_csv.index + 1  # Shift index
                 data_csv = data_csv.sort_index()
                 
-                logger.info(f"- Model {name}: Accuracy: {accuracy}, F1 Score: {f1}, Precision: {precision}, Recall: {recall}")
+                logger.info(f"- Model {name}: Accuracy: {metrics['accuracy']}, F1 Score: {metrics['f1_score']}, Precision: {metrics['precision']}, Recall: {metrics['recall']}")
                 
             save_data(data_csv, self.model_save_path + "model_evaluation_results.csv")
             

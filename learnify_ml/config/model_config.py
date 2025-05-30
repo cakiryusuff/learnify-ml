@@ -6,7 +6,7 @@ from lightgbm import LGBMClassifier
 from scipy.stats import randint, uniform
 from sklearn.model_selection import RandomizedSearchCV, GridSearchCV
 
-search_methods_params = {
+default_search_methods_params = {
     "randomized": {
         "n_iter": 10,
         "cv": 5,
@@ -19,13 +19,13 @@ search_methods_params = {
     }
 }
 
-search_methods = {
+default_search_methods = {
     "randomized": RandomizedSearchCV,
     "grid": GridSearchCV
 }
 
 
-models = {
+default_models = {
     "RandomForest": RandomForestClassifier(),
     "KNeighbors": KNeighborsClassifier(),
     "SVC": SVC(),
@@ -33,7 +33,7 @@ models = {
     "LightGBM": LGBMClassifier(verbosity=-1)
 }
 
-params = {
+default_params = {
     "grid": {
         "RandomForest": {
             "n_estimators": [100, 200, 300],

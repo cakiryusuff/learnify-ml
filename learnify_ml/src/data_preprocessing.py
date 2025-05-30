@@ -32,7 +32,7 @@ class DataPreprocessor():
     """
     
     def __init__(self, 
-                target_column: str = ...,
+                target_column: str = None,
                 data_path: str | None = DATA_PREPROCESSING_INPUT,
                 data_output_path: str | None = DATA_PREPROCESSING_OUTPUT,
                 impute_strategy: Literal["mean", "median", "most_frequent"] = "mean",
@@ -45,6 +45,10 @@ class DataPreprocessor():
                 apply_smote: bool = True):
         
         self.target_column = target_column
+        
+        if self.target_column is None:
+            raise ValueError("target_column must be specified")
+        
         self.data_path = data_path
         self.data_output_path = data_output_path
         self.impute_strategy = impute_strategy
@@ -327,6 +331,41 @@ class DataPreprocessor():
             logger.error(f"Error in calculating variance inflation factor: {e}")
             raise CustomException(e, "Error in calculating variance inflation factor")
         
+    def principal_component_analysis(self, df: pd.DataFrame, feature_count_threshold: int = 15, n_components: int = 2) -> pd.DataFrame:
+        try:
+            """
+            Apply Principal Component Analysis (PCA) to reduce dimensionality of the DataFrame.
+            
+            Parameters:
+            df (pd.DataFrame): The DataFrame containing the data.
+            feature_count_threshold (int): The number of features to retain after PCA.
+            
+            Returns:
+            pd.DataFrame: The DataFrame with reduced features.
+            """
+            df = df.copy()
+            
+            X = df.drop(columns=[self.target_column])
+            y = df[self.target_column]
+            
+            from sklearn.decomposition import PCA
+            
+            if df.shape[1] <= feature_count_threshold:
+                logger.info("Number of features is less than or equal to the threshold, skipping PCA")
+                return df
+            
+            logger.info("Applying Principal Component Analysis (PCA) to reduce dimensionality")
+            pca = PCA(n_components=n_components)
+            X_pca = pca.fit_transform(X)
+            pca_columns = [f"PC{i+1}" for i in range(X_pca.shape[1])]
+            df_reduced = pd.DataFrame(X_pca, columns=pca_columns, index=df.index)
+            
+            return pd.concat([df_reduced, y], axis=1)
+        
+        except Exception as e:
+            logger.error(f"Error in applying Principal Component Analysis (PCA): {e}")
+            raise CustomException(e, "Error in applying Principal Component Analysis (PCA)")
+        
     def skewness_treatment(self, df: pd.DataFrame) -> pd.DataFrame:
         """
         Apply log transformation to skewed numerical features.
@@ -414,6 +453,8 @@ class DataPreprocessor():
             df = self.scale_numeric_features(df)
 
             df = self.label_encode(df)
+            
+            # df = self.principal_component_analysis(df)
 
             df = self.feature_selection(df)
 

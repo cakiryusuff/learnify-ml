@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "learnify_ml"
-version = "0.0.16"
+version = "0.0.17"
 description = "A package for auto preprocessing and training machine learning models"
 readme = "README.md"
 requires-python = ">=3.11"
@@ -19,7 +19,8 @@ dependencies = [
     "lightgbm",
     "xgboost",
     "imbalanced-learn",
-    "statsmodels"
+    "statsmodels",
+    "tqdm"
 ]
 classifiers = [
   "Programming Language :: Python"

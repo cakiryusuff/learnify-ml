@@ -1,9 +1,10 @@
 from learnify_ml.config.config_paths import *
-from learnify_ml.config.model_config import models, params
+from learnify_ml.config.model_config import default_models, default_params
 from learnify_ml.src.data_preprocessing import DataPreprocessor
 from learnify_ml.src.model_training import ModelTrainer
 from typing import Literal
 from sklearn.ensemble import RandomForestClassifier
+from typing import Any
 
 class AutoMLPipeline:
     """Configuration class for the AutoML pipeline.
@@ -35,7 +36,7 @@ class AutoMLPipeline:
     random_state (int) : The random state for reproducibility.
     """
     def __init__(self,
-                target_column: str = ...,
+                target_column: str = None,
                 use_case: str = "classification",
                 test_size: float = 0.2,
                 random_state: int = 42,
@@ -54,13 +55,17 @@ class AutoMLPipeline:
                 encode_target_column: bool = False,
                 
                 model = RandomForestClassifier(),
-                models_list: dict = models,
-                params_list: dict = params,
+                models_list: dict[str, Any] = None,
+                params_list: dict[str, dict[str, Any]] = None,
                 apply_hyperparameter_tuning: bool = False,
                 hyperparameter_tuning_method: Literal["randomized", "grid"] = "randomized"
                 ):
         
         self.target_column = target_column
+        
+        if self.target_column is None:
+            raise ValueError("target_column must be specified.")
+        
         self.data_path = data_path
         self.data_output_path = data_output_path
         self.impute_strategy = impute_strategy
@@ -76,8 +81,8 @@ class AutoMLPipeline:
         self.random_state = random_state
         self.model_save_path = model_save_path
         self.model = model
-        self.models_list = models_list
-        self.params_list = params_list
+        self.models_list = models_list or default_models
+        self.params_list = params_list or default_params
         self.encode_target_column = encode_target_column
         self.hyperparameter_tuning_method = hyperparameter_tuning_method
         
