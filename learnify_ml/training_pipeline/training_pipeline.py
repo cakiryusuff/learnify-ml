@@ -50,9 +50,12 @@ class AutoMLPipeline:
                 apply_outlier: bool = False,
                 apply_vif: bool = False,
                 apply_skewness: bool = False,
+                apply_tf_idf: bool = False,
+                encode_target_column: bool = False,
                 apply_scale: bool = True,
                 apply_smote: bool = True,
-                encode_target_column: bool = False,
+                apply_feature_selection: bool = True,
+
                 
                 model = RandomForestClassifier(),
                 models_list: dict[str, Any] = None,
@@ -75,6 +78,8 @@ class AutoMLPipeline:
         self.apply_outlier = apply_outlier
         self.apply_vif = apply_vif
         self.apply_skewness = apply_skewness
+        self.apply_tf_idf = apply_tf_idf
+        self.apply_feature_selection = apply_feature_selection
         self.apply_hyperparameter_tuning = apply_hyperparameter_tuning
         self.use_case = use_case
         self.test_size = test_size
@@ -101,8 +106,10 @@ class AutoMLPipeline:
             apply_scale=self.apply_scale,
             apply_outlier=self.apply_outlier,
             apply_vif=self.apply_vif,
+            apply_tf_idf=self.apply_tf_idf,
             apply_skewness=self.apply_skewness,
-            encode_target_column=self.encode_target_column
+            encode_target_column=self.encode_target_column,
+            apply_feature_selection=self.apply_feature_selection,
         )
         
         preprocessor.run_preprocessing()

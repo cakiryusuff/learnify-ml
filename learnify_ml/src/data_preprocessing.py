@@ -1,9 +1,15 @@
 from typing import List, Tuple
 import pandas as pd
 import numpy as np
+import re
+import string
+import nltk
+from nltk.corpus import stopwords
+from nltk.stem import WordNetLemmatizer
 from typing import Literal
 from learnify_ml.utils.common_functions import load_data, save_data
 from learnify_ml.src.custom_exception import CustomException
+from sklearn.feature_selection import mutual_info_classif, f_regression, SelectKBest
 from learnify_ml.src.logger import get_logger
 from learnify_ml.config.config_paths import *
 
@@ -42,6 +48,8 @@ class DataPreprocessor():
                 encode_target_column: bool = False,
                 apply_outlier: bool = False,
                 apply_vif: bool = False,
+                apply_tf_idf: bool = False,
+                apply_feature_selection: bool = True,
                 apply_smote: bool = True):
         
         self.target_column = target_column
@@ -50,6 +58,7 @@ class DataPreprocessor():
             raise ValueError("target_column must be specified")
         
         self.data_path = data_path
+        self.apply_tf_idf = apply_tf_idf
         self.data_output_path = data_output_path
         self.impute_strategy = impute_strategy
         self.impute_strategy_remove = impute_strategy_remove
@@ -59,6 +68,16 @@ class DataPreprocessor():
         self.apply_outlier = apply_outlier
         self.apply_vif = apply_vif
         self.apply_smote = apply_smote
+        self.apply_feature_selection = apply_feature_selection
+        self.categorical_columns: List[str] = []
+        self.text_columns: List[str] = []
+        
+        nltk.download('stopwords', quiet=True)
+        nltk.download('punkt', quiet=True)
+        nltk.download('wordnet', quiet=True)
+        nltk.download('omw-1.4', quiet=True)
+        nltk.download('punkt_tab', quiet=True)
+        
 
     def preprocess_data(self, df: pd.DataFrame) -> pd.DataFrame:
         try:
@@ -110,8 +129,6 @@ class DataPreprocessor():
                 else:
                     text_cols.append(col)
 
-            df = df.drop(columns=text_cols)
-            
             logger.info(f"- Number of categorical columns: {len(categorical_cols)}, categorical columns: {categorical_cols}")
             logger.info(f"- Number of text columns: {len(text_cols)}, text columns: {text_cols}")
             
@@ -250,7 +267,7 @@ class DataPreprocessor():
             logger.error(f"Error in scaling numeric features: {e}")
             raise CustomException(e, "Error in scaling numeric features")
     
-    def label_encode(self, df: pd.DataFrame) -> pd.DataFrame:
+    def label_encode(self, df: pd.DataFrame, categorical_columns: List[str]) -> pd.DataFrame:
         """
         Label encode categorical columns in the DataFrame.
         
@@ -265,8 +282,7 @@ class DataPreprocessor():
             
             df = df.copy()
             
-            categorical_cols = df.select_dtypes(include=['object']).columns
-            for col in categorical_cols:
+            for col in categorical_columns:
                 df[col] = df[col].astype('category').cat.codes
                 
             if self.encode_target_column and self.target_column in df.columns:
@@ -278,27 +294,48 @@ class DataPreprocessor():
             logger.error(f"Error in label encoding: {e}")
             raise CustomException(e, "Error in label encoding")
 
-    def feature_selection(self, df: pd.DataFrame) -> pd.DataFrame:
+    def feature_selection(self, df: pd.DataFrame, k: int = 20) -> pd.DataFrame:
         """
-        Select features based on correlation with the target variable.
-        
+        Select features based on mutual information (for classification)
+        or F-regression score (for regression).
+
         Parameters:
         df (pd.DataFrame): The DataFrame containing the data.
-        
+        k (int): Number of top features to select.
+
         Returns:
         pd.DataFrame: The DataFrame with selected features.
         """
         try:
-            logger.info("Selecting features based on correlation with target variable")
+            if not self.apply_feature_selection:
+                logger.info("Skipping feature selection as apply_feature_selection is set to False")
+                return df
+            
+            logger.info("Starting feature selection")
+
             df = df.copy()
-            corr_matrix = df.corr()
-            target_corr = corr_matrix[self.target_column].abs().sort_values(ascending=False)
-            selected_features = target_corr[target_corr > 0.1].index.tolist()
-            return df[selected_features]
+            X = df.drop(columns=[self.target_column])
+            y = df[self.target_column]
+
+            # Determine selection method based on problem type
+            selector = SelectKBest(score_func=mutual_info_classif, k=min(k, X.shape[1]))
+            # elif self.problem_type == "regression":
+            #     selector = SelectKBest(score_func=f_regression, k=min(k, X.shape[1]))
+            # else:
+            #     raise ValueError("Unsupported problem type: choose 'classification' or 'regression'")
+
+            X_selected = selector.fit_transform(X, y)
+            selected_columns = X.columns[selector.get_support()]
+
+            logger.info(f"Selected top {len(selected_columns)} features: {list(selected_columns)}")
+
+            # Return DataFrame with selected features and target
+            return pd.concat([df[selected_columns], y], axis=1)
+
         except Exception as e:
             logger.error(f"Error in feature selection: {e}")
             raise CustomException(e, "Error in feature selection")
-    
+
     def variance_inflation(self, df: pd.DataFrame) -> pd.DataFrame:
         """
         Calculate and remove features with high variance inflation factor (VIF).
@@ -393,7 +430,73 @@ class DataPreprocessor():
         except Exception as e:
             logger.error(f"Error in skewness treatment: {e}")
             raise CustomException(e, "Error in skewness treatment")
+    
+    def preprocess_text(self, text, remove_numbers=True, do_lemmatize=True):
+        """ Preprocess text data by converting to lowercase, removing punctuation, removing numbers, tokenizing, removing stopwords, and lemmatizing.
+        Parameters
+        ----------
+        text (str) : The text to preprocess.
+        remove_numbers (bool) : Whether to remove numbers from the text.
+        do_lemmatize (bool) : Whether to perform lemmatization on the tokens.
         
+        Returns:
+        str : The cleaned text after preprocessing.
+        """
+
+        text = text.lower()
+
+        text = text.translate(str.maketrans('', '', string.punctuation))
+
+        if remove_numbers:
+            text = re.sub(r'\d+', '', text)
+
+        tokens = nltk.word_tokenize(text)
+
+        stop_words = set(stopwords.words('english'))
+        tokens = [word for word in tokens if word not in stop_words]
+
+        if do_lemmatize:
+            lemmatizer = WordNetLemmatizer()
+            tokens = [lemmatizer.lemmatize(word) for word in tokens]
+
+        cleaned_text = ' '.join(tokens)
+
+        return cleaned_text
+    
+    def tf_idf_vectorization(self, df: pd.DataFrame, text_columns: List[str]) -> pd.DataFrame:
+        """
+        Apply TF-IDF vectorization to text columns in the DataFrame.
+        Parameters:
+        df (pd.DataFrame): The DataFrame containing the data.
+        text_columns (List[str]): List of text columns to apply TF-IDF vectorization.
+        Returns:
+        pd.DataFrame: The DataFrame with TF-IDF vectorized text columns.
+        """
+        try:
+            if not self.apply_tf_idf or not text_columns:
+                logger.info("Skipping TF-IDF vectorization as apply_tf_idf is set to False")
+                return df
+            
+            from sklearn.feature_extraction.text import TfidfVectorizer
+            
+            logger.info("Applying TF-IDF vectorization to text columns")
+            df = df.copy()
+            
+            for col in text_columns:
+                cleaned_texts = df[col].astype(str).apply(self.preprocess_text)
+                vectorizer = TfidfVectorizer(max_features=500, max_df=0.9)
+                tfidf_matrix = vectorizer.fit_transform(cleaned_texts)
+
+                feature_names = [f"{col}_tfidf_{name}" for name in vectorizer.get_feature_names_out()]
+                tfidf_df = pd.DataFrame(tfidf_matrix.toarray(), columns=feature_names, index=df.index)
+
+                df = pd.concat([df.drop(columns=[col]), tfidf_df], axis=1)
+            
+            return df
+        except Exception as e:
+            logger.error(f"Error in applying TF-IDF vectorization: {e}")
+            raise CustomException(e, "Error in applying TF-IDF vectorization")
+    
     def balance_data(self, df: pd.DataFrame) -> pd.DataFrame:
         """
         Balance the dataset using random oversampling.
@@ -442,7 +545,7 @@ class DataPreprocessor():
 
             df = self.preprocess_data(df)
 
-            df, _, _ = self.split_object_columns(df) #? categorical and text columns can be used later
+            df, self.categorical_columns, self.text_columns = self.split_object_columns(df) #? categorical and text columns can be used later
 
             df = self.remove_outliers(df)
 
@@ -452,9 +555,11 @@ class DataPreprocessor():
 
             df = self.scale_numeric_features(df)
 
-            df = self.label_encode(df)
+            df = self.label_encode(df, self.categorical_columns)
             
             # df = self.principal_component_analysis(df)
+            
+            df = self.tf_idf_vectorization(df, self.text_columns)
 
             df = self.feature_selection(df)
 
@@ -467,8 +572,3 @@ class DataPreprocessor():
         except Exception as e:
             logger.error(f"Error in running preprocessing pipeline: {e}")
             raise CustomException(e, "Error in running preprocessing pipeline")
-
-if __name__ == "__main__":
-    preprocessor = DataPreprocessor(target_column="Survived")
-    preprocessed_data = preprocessor.run_preprocessing()
-    print("Preprocessing completed. Preprocessed data saved to:", DATA_PREPROCESSING_OUTPUT)
