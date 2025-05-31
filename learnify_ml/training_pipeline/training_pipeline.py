@@ -1,5 +1,5 @@
 from learnify_ml.config.config_paths import *
-from learnify_ml.config.model_config import default_models, default_params
+from learnify_ml.config.model_config import default_models, default_params, default_search_methods, default_search_methods_params
 from learnify_ml.src.data_preprocessing import DataPreprocessor
 from learnify_ml.src.model_training import ModelTrainer
 from typing import Literal
@@ -60,6 +60,8 @@ class AutoMLPipeline:
                 model = RandomForestClassifier(),
                 models_list: dict[str, Any] = None,
                 params_list: dict[str, dict[str, Any]] = None,
+                search_methods: dict[str, Any] = default_search_methods,
+                search_methods_params: dict[str, dict[str, dict[str, Any]]] = default_search_methods_params,
                 apply_hyperparameter_tuning: bool = False,
                 hyperparameter_tuning_method: Literal["randomized", "grid"] = "randomized"
                 ):
@@ -89,6 +91,8 @@ class AutoMLPipeline:
         self.models_list = models_list or default_models
         self.params_list = params_list or default_params
         self.encode_target_column = encode_target_column
+        self.search_methods = search_methods or default_search_methods
+        self.search_methods_params = search_methods_params or default_search_methods_params
         self.hyperparameter_tuning_method = hyperparameter_tuning_method
         
     def run_pipeline(self):
@@ -99,6 +103,7 @@ class AutoMLPipeline:
         preprocessor = DataPreprocessor(
             target_column=self.target_column,
             data_path=self.data_path,
+            use_case=self.use_case,
             data_output_path=self.data_output_path,
             impute_strategy=self.impute_strategy,
             impute_strategy_remove=self.impute_strategy_remove,
@@ -125,6 +130,8 @@ class AutoMLPipeline:
             apply_hyperparameter_tuning=self.apply_hyperparameter_tuning,
             hyperparameter_tuning_method=self.hyperparameter_tuning_method,
             test_size=self.test_size,
+            search_methods=self.search_methods,
+            search_methods_params=self.search_methods_params,
             random_state=self.random_state
         )
         

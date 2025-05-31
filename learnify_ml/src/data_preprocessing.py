@@ -9,7 +9,7 @@ from nltk.stem import WordNetLemmatizer
 from typing import Literal
 from learnify_ml.utils.common_functions import load_data, save_data
 from learnify_ml.src.custom_exception import CustomException
-from sklearn.feature_selection import mutual_info_classif, f_regression, SelectKBest
+from sklearn.feature_selection import mutual_info_classif, f_regression, SelectKBest, mutual_info_regression
 from learnify_ml.src.logger import get_logger
 from learnify_ml.config.config_paths import *
 
@@ -39,6 +39,7 @@ class DataPreprocessor():
     
     def __init__(self, 
                 target_column: str = None,
+                use_case: Literal["classification", "regression"] = "classification",
                 data_path: str | None = DATA_PREPROCESSING_INPUT,
                 data_output_path: str | None = DATA_PREPROCESSING_OUTPUT,
                 impute_strategy: Literal["mean", "median", "most_frequent"] = "mean",
@@ -58,6 +59,7 @@ class DataPreprocessor():
             raise ValueError("target_column must be specified")
         
         self.data_path = data_path
+        self.use_case = use_case
         self.apply_tf_idf = apply_tf_idf
         self.data_output_path = data_output_path
         self.impute_strategy = impute_strategy
@@ -318,11 +320,11 @@ class DataPreprocessor():
             y = df[self.target_column]
 
             # Determine selection method based on problem type
-            selector = SelectKBest(score_func=mutual_info_classif, k=min(k, X.shape[1]))
-            # elif self.problem_type == "regression":
-            #     selector = SelectKBest(score_func=f_regression, k=min(k, X.shape[1]))
-            # else:
-            #     raise ValueError("Unsupported problem type: choose 'classification' or 'regression'")
+            if self.use_case == "classification":
+                selector = SelectKBest(score_func=mutual_info_classif, k=min(k, X.shape[1]))
+            elif self.use_case == "regression":
+                # selector = SelectKBest(score_func=f_regression, k=min(k, X.shape[1]))
+                selector = SelectKBest(score_func=mutual_info_regression, k=min(k, X.shape[1]))
 
             X_selected = selector.fit_transform(X, y)
             selected_columns = X.columns[selector.get_support()]
@@ -510,7 +512,7 @@ class DataPreprocessor():
         """
         try:
             
-            if not self.apply_smote:
+            if not self.apply_smote or self.use_case == "regression":
                 logger.info("Skipping balancing data as apply_smote is set to False")
                 return df
             

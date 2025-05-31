@@ -4,14 +4,19 @@ from learnify_ml.utils.common_functions import load_data, save_data
 from learnify_ml.src.custom_exception import CustomException
 from learnify_ml.src.logger import get_logger
 from learnify_ml.config.config_paths import *
-from learnify_ml.config.model_config import default_models, default_params, default_search_methods, default_search_methods_params
+from learnify_ml.config.model_config import default_models, default_params, default_search_methods, default_search_methods_params, default_metrics
 from typing import Literal
 import os
 from tqdm import tqdm
 
-from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score, classification_report
+from sklearn.metrics import (
+        accuracy_score, f1_score, precision_score, recall_score, classification_report,
+        mean_squared_error, mean_absolute_error, r2_score, root_mean_squared_error
+    )
 from sklearn.model_selection import train_test_split, KFold, cross_val_score
 from sklearn.ensemble import RandomForestClassifier
+
+from typing import Any
 
 logger = get_logger(__name__)
 
@@ -37,7 +42,7 @@ class ModelTrainer:
     """
     def __init__(self,
                 target_column: str,
-                use_case: str = "classification",  # e.g., classification, regression
+                use_case: Literal["classification", "regression"] = "classification",  # e.g., classification, regression
                 model = RandomForestClassifier(),
                 models_list: dict = None,
                 params_list: dict = None,
@@ -47,8 +52,8 @@ class ModelTrainer:
                 model_save_path: str = MODEL_SAVE_PATH,
                 test_size: float = 0.2,
                 random_state: int = 42,
-                search_methods: dict = None,
-                search_methods_params: dict = None
+                search_methods: dict[str, Any] = None,
+                search_methods_params: dict[str, dict[str, dict[str, Any]]] = None
                 ):
         
         self.target_column = target_column
@@ -69,6 +74,7 @@ class ModelTrainer:
         self.is_multiclass = None
         self.search_methods = search_methods or default_search_methods
         self.search_methods_params = search_methods_params or default_search_methods_params
+        self.default_metrics = default_metrics
 
         
         os.makedirs(os.path.dirname(self.model_save_path), exist_ok=True)
@@ -87,8 +93,10 @@ class ModelTrainer:
             logger.info("Splitting data into training and testing sets")
             X = df.drop(self.target_column, axis=1)
             y = df[self.target_column]
+            
             if self.use_case == "classification":
                 self.is_multiclass = "micro" if len(y.unique()) > 2 else "binary"
+                
             X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=self.test_size, random_state=self.random_state)
             return X_train, X_test, y_train, y_test
         except Exception as e:
@@ -98,79 +106,122 @@ class ModelTrainer:
     def train_models(self, X_train, y_train):
         try:
             logger.info("Model training process started")
-
             engine = ModelTrainingEngine(
                 models=self.models,
                 params=self.params,
                 model=self.model,
+                use_case=self.use_case,
                 apply_hyperparameter_tuning=self.apply_hyperparameter_tuning,
                 hyperparameter_tuning_method=self.hyperparameter_tuning_method,
                 search_methods=self.search_methods,
                 search_methods_params=self.search_methods_params,
                 random_state=self.random_state
             )
+            # elif self.use_case == "regression":
+            #     engine = RegressionTrainEngine()
+                
 
             return engine.train(X_train, y_train)
 
         except Exception as e:
             logger.error(f"Error in training models: {e}")
             raise CustomException(e, "Error in training models")
-    
-    def get_metrics(self, y_true, y_pred, average):
+
+    def get_metrics(self, y_true, y_pred, average=None):
         """
-        Calculate and return evaluation metrics for the model.
-        
+        Calculate evaluation metrics based on the use case.
+
         Parameters:
-        y_true (array-like): True labels.
-        y_pred (array-like): Predicted labels.
-        
+        - y_true (array-like): True labels.
+        - y_pred (array-like): Predicted labels.
+        - average (str): Averaging method for classification metrics.
+
         Returns:
-        dict: A dictionary containing accuracy, f1_score, precision, and recall.
+        - dict: Dictionary of relevant metrics.
         """
         try:
-            accuracy = accuracy_score(y_true, y_pred)
-            f1 = f1_score(y_true, y_pred, average=average)
-            precision = precision_score(y_true, y_pred, average=average)
-            recall = recall_score(y_true, y_pred, average=average)
-            report = classification_report(y_true, y_pred)
-            
-            return {
-                "accuracy": accuracy,
-                "f1_score": f1,
-                "precision": precision,
-                "recall": recall,
-                "classification_report": report
-            }
+            if self.use_case == "classification":
+                return {
+                    "accuracy": accuracy_score(y_true, y_pred),
+                    "f1_score": f1_score(y_true, y_pred, average=average),
+                    "precision": precision_score(y_true, y_pred, average=average),
+                    "recall": recall_score(y_true, y_pred, average=average),
+                    "classification_report": classification_report(y_true, y_pred)
+                }
+
+            elif self.use_case == "regression":
+                return {
+                    "mean_squared_error": mean_squared_error(y_true, y_pred),
+                    "root_mean_squared_error": root_mean_squared_error(y_true, y_pred),
+                    "mean_absolute_error": mean_absolute_error(y_true, y_pred),
+                    "r2_score": r2_score(y_true, y_pred)
+                }
+
+            else:
+                raise ValueError(f"Unsupported use case: {self.use_case}")
+
         except Exception as e:
             logger.error(f"Error in calculating metrics: {e}")
             raise CustomException(e, "Error in calculating metrics")
+
         
     def evaluate_models(self, results, X_test, y_test):
+        """
+        Evaluate multiple models and save the evaluation results to CSV.
+
+        Parameters:
+        - results (dict): Dictionary with model names and their best estimators.
+        - X_test (array-like): Test features.
+        - y_test (array-like): Test target values.
+
+        Returns:
+        - dict: Dictionary containing metrics per model.
+        """
         try:
-            logger.info("Starting model evaluation")
-            data_csv = pd.DataFrame(columns=["model", "accuracy", "f1_score", "precision", "recall"])
+            logger.info("Starting model evaluation...")
+
             evaluation_results = {}
-            
+            rows = []
+
             for name, result in results.items():
                 best_model = result["best_model"]
                 y_pred = best_model.predict(X_test)
-            
-                metrics = self.get_metrics(y_test, y_pred, self.is_multiclass)
-                
+
+                metrics = self.get_metrics(y_test, y_pred, average=self.is_multiclass)
                 evaluation_results[name] = metrics
-                
-                data_csv.loc[-1] = [name, metrics["accuracy"], metrics["f1_score"], metrics["precision"], metrics["recall"]]
-                data_csv.index = data_csv.index + 1  # Shift index
-                data_csv = data_csv.sort_index()
-                
-                logger.info(f"- Model {name}: Accuracy: {metrics['accuracy']}, F1 Score: {metrics['f1_score']}, Precision: {metrics['precision']}, Recall: {metrics['recall']}")
-                
+
+                if self.use_case == "classification":
+                    row = {
+                        "model": name,
+                        "accuracy": metrics["accuracy"],
+                        "f1_score": metrics["f1_score"],
+                        "precision": metrics["precision"],
+                        "recall": metrics["recall"]
+                    }
+                    logger.info(f"- Model {name}: Accuracy: {metrics['accuracy']:.4f}, F1: {metrics['f1_score']:.4f}, Precision: {metrics['precision']:.4f}, Recall: {metrics['recall']:.4f}")
+
+                elif self.use_case == "regression":
+                    row = {
+                        "model": name,
+                        "mean_squared_error": metrics["mean_squared_error"],
+                        "root_mean_squared_error": metrics["root_mean_squared_error"],
+                        "mean_absolute_error": metrics["mean_absolute_error"],
+                        "r2_score": metrics["r2_score"]
+                    }
+                    logger.info(f"- Model {name}: RMSE: {metrics['root_mean_squared_error']:.4f}, MAE: {metrics['mean_absolute_error']:.4f}, R²: {metrics['r2_score']:.4f}")
+
+                rows.append(row)
+
+            data_csv = pd.DataFrame(rows)
+
             save_data(data_csv, self.model_save_path + "model_evaluation_results.csv")
-            
+
             return evaluation_results
+
         except Exception as e:
             logger.error(f"Error in evaluating models: {e}")
             raise CustomException(e, "Error in evaluating models")
+
     
     def save_best_model(self, best_model, best_model_name):
         """
@@ -199,7 +250,8 @@ class ModelTrainer:
             
             evaluation_results = self.evaluate_models(results, X_test, y_test)
             
-            best_model_name = max(evaluation_results, key=lambda x: evaluation_results[x]['accuracy'])
+            best_model_name = max(evaluation_results, key=lambda x: evaluation_results[x][self.default_metrics[self.use_case]])
+                
             best_model = results[best_model_name]["best_model"]
             self.save_best_model(best_model, best_model_name)
             
