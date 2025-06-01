@@ -53,7 +53,20 @@ from learnify_ml import AutoMLPipeline
 🔹 2. Run the pipeline
 
 ```python
-trainer = AutoMLPipeline(data_path="data.csv", target_column="target")
+trainer = AutoMLPipeline(target_column="target_column",
+                      use_case="regression",
+                      apply_hyperparameter_tuning=True,
+                      hyperparameter_tuning_method="randomized",
+                      apply_tf_idf=False,
+                      apply_scale=True,
+                      apply_feature_selection=True,
+                      apply_outlier=True,
+                      apply_vif=True,
+                      apply_skewness=True,
+                      apply_smote=False,
+                      test_size=0.2,
+                      impute_strategy="mean",
+                      ).run_pipeline()
 trainer.run_pipeline()
 ```
 

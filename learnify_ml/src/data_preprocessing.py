@@ -85,19 +85,16 @@ class DataPreprocessor():
         try:
             # TODO: Add more preprocessing steps as needed (e.g., imputation, scaling, etc.)
             # TODO: Make this function more dynamic to handle different datasets
+            # TODO: Make this feature engineering stuff more dynamic, it can be done using AI agents
+            
             logger.info("Starting data preprocessing")
             
             df = df.copy()
             
-            df = df.dropna(axis=1, how='all')
+            # df = df.dropna(axis=1, how='all')
             
             df = df.drop_duplicates()
         
-            # TODO: Make this feature engineering stuff more dynamic, it can be done using AI agents
-            # df["Title"] = df["Name"].apply(lambda x: x.split(",")[1].split(".")[0])
-            # df["Age"] = df["Age"].fillna(df.groupby("Sex")["Age"].transform("mean"))
-            # df["FamilySize"] = df["SibSp"] + df["Parch"] + 1
-            # df.drop(["Name", "Ticket", "Cabin", "PassengerId", "SibSp", "Parch"], axis=1, inplace=True)
             
             return df
         
