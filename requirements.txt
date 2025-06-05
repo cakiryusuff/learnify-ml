@@ -7,3 +7,6 @@ xgboost
 imbalanced-learn
 statsmodels
 tqdm
+nltk
+matplotlib
+seaborn

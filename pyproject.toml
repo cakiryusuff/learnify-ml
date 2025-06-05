@@ -21,7 +21,10 @@ dependencies = [
     "imbalanced-learn",
     "statsmodels",
     "tqdm",
-    "nltk"
+    "nltk",
+    "matplotlib"
+    "seaborn"
+
 ]
 classifiers = [
   "Programming Language :: Python"
