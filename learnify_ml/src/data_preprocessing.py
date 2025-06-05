@@ -544,7 +544,7 @@ class DataPreprocessor():
 
             df = self.preprocess_data(df)
 
-            df, self.categorical_columns, self.text_columns = self.split_object_columns(df) #? categorical and text columns can be used later
+            df, self.categorical_columns, self.text_columns = self.split_object_columns(df)
 
             df = self.remove_outliers(df)
 
@@ -567,7 +567,10 @@ class DataPreprocessor():
             df = self.balance_data(df)
             
             save_data(df, self.data_output_path)
+            
             logger.info("Preprocessing completed successfully")
+            
+            return df
         except Exception as e:
             logger.error(f"Error in running preprocessing pipeline: {e}")
             raise CustomException(e, "Error in running preprocessing pipeline")

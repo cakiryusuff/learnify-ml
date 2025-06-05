@@ -117,7 +117,7 @@ class AutoMLPipeline:
             apply_feature_selection=self.apply_feature_selection,
         )
         
-        preprocessor.run_preprocessing()
+        df = preprocessor.run_preprocessing()
 
         trainer = ModelTrainer(
             target_column=self.target_column,
@@ -135,4 +135,6 @@ class AutoMLPipeline:
             random_state=self.random_state
         )
         
-        trainer.run_training()
+        best_model, evaluation_results = trainer.run_training()
+        
+        return best_model, evaluation_results, df

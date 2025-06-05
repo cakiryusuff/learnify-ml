@@ -117,9 +117,6 @@ class ModelTrainer:
                 search_methods_params=self.search_methods_params,
                 random_state=self.random_state
             )
-            # elif self.use_case == "regression":
-            #     engine = RegressionTrainEngine()
-                
 
             return engine.train(X_train, y_train)
 
@@ -257,10 +254,9 @@ class ModelTrainer:
             
             logger.info("Model training process completed successfully")
             
+            return best_model, evaluation_results
+            
         except Exception as e:
             logger.error(f"Error in model training process: {e}")
             raise CustomException(e, "Error in model training process")
         
-if __name__ == "__main__":
-    trainer = ModelTrainer(target_column="Survived")
-    trainer.run_training()
