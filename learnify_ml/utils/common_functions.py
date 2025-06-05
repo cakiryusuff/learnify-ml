@@ -1,6 +1,7 @@
 import pandas as pd
 from learnify_ml.src.custom_exception import CustomException
 from learnify_ml.src.logger import get_logger
+import os
 
 logger = get_logger(__name__)
 
@@ -29,6 +30,7 @@ def save_data(data, file_path):
         data (pd.DataFrame): The data to save.
         file_path (str): The path to the CSV file where the data will be saved.
         """
+        os.makedirs(os.path.dirname(file_path), exist_ok=True)
         logger.info(f"Saving data to {file_path}")
         data.to_csv(file_path, index=False)
     except Exception as e:
