@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "learnify_ml"
-version = "0.0.20"
+version = "0.0.21"
 description = "A package for auto preprocessing and training machine learning models"
 readme = "README.md"
 requires-python = ">=3.11"
@@ -22,9 +22,8 @@ dependencies = [
     "statsmodels",
     "tqdm",
     "nltk",
-    "matplotlib"
+    "matplotlib",
     "seaborn"
-
 ]
 classifiers = [
   "Programming Language :: Python"
