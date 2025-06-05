@@ -2,12 +2,14 @@ from learnify_ml.src.custom_exception import CustomException
 from learnify_ml.src.logger import get_logger
 from learnify_ml.config.model_config import default_metrics
 from sklearn.model_selection import KFold, cross_val_score
+from sklearn.base import BaseEstimator, ClassifierMixin
+
 from tqdm import tqdm
 from typing import Any
 
 logger = get_logger(__name__)
 
-class ModelTrainingEngine:
+class ModelTrainingEngine(BaseEstimator, ClassifierMixin):
     def __init__(self, 
                  models,
                  params,
