@@ -43,9 +43,8 @@ default_search_methods = {
 
 default_metrics = {
     "classification": "accuracy",
-    "regression": "r2"
+    "regression": "r2_score"
     }
-
 
 default_models = {
     "classification": {
