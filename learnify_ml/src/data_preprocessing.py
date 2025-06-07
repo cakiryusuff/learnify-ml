@@ -456,7 +456,7 @@ class DataPreprocessor():
 
         return cleaned_text
     
-    def tf_idf_vectorization(self, df: pd.DataFrame, text_columns: List[str], preprocess_text: function, apply_tf_idf: bool = True) -> pd.DataFrame:
+    def tf_idf_vectorization(self, df: pd.DataFrame, text_columns: List[str], preprocess_text, apply_tf_idf: bool = True) -> pd.DataFrame:
         """
         Apply TF-IDF vectorization to text columns in the DataFrame.
         Parameters:
