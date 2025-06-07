@@ -42,7 +42,7 @@ class ModelTrainingEngine(BaseEstimator, ClassifierMixin):
                     search_class = self.search_methods[self.hyperparameter_tuning_method]
                     search_class_params = self.search_methods_params[self.use_case][self.hyperparameter_tuning_method]
                     search = search_class(model,
-                                          param_distributions=self.params[self.use_case][self.hyperparameter_tuning_method][name],
+                                          self.params[self.use_case][self.hyperparameter_tuning_method][name],
                                           **search_class_params,
                                         #   n_jobs=-1
                                           )

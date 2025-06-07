@@ -5,6 +5,7 @@ from learnify_ml.src.model_training import ModelTrainer
 from typing import Literal
 from sklearn.ensemble import RandomForestClassifier
 from typing import Any
+import pandas as pd
 
 class AutoMLPipeline:
     """Configuration class for the AutoML pipeline.
@@ -13,7 +14,7 @@ class AutoMLPipeline:
     
     Parameters
     ----------
-    
+    data (pd.DataFrame) : The input dataset. Default is None. If not provided, the data will be loaded from the specified or default path.
     target_column (str) : The name of the target column in the dataset.
     data_path (str) : The path to the input dataset.
     data_output_path (str) : The path where the preprocessed dataset will be saved.
@@ -36,6 +37,7 @@ class AutoMLPipeline:
     random_state (int) : The random state for reproducibility.
     """
     def __init__(self,
+                 data: pd.DataFrame | None = None,
                 target_column: str = None,
                 use_case: str = "classification",
                 test_size: float = 0.2,
@@ -56,7 +58,6 @@ class AutoMLPipeline:
                 apply_smote: bool = True,
                 apply_feature_selection: bool = True,
 
-                
                 model = RandomForestClassifier(),
                 models_list: dict[str, Any] = None,
                 params_list: dict[str, dict[str, Any]] = None,
@@ -71,6 +72,7 @@ class AutoMLPipeline:
         if self.target_column is None:
             raise ValueError("target_column must be specified.")
         
+        self.data = data
         self.data_path = data_path
         self.data_output_path = data_output_path
         self.impute_strategy = impute_strategy
@@ -101,6 +103,7 @@ class AutoMLPipeline:
         """
         
         preprocessor = DataPreprocessor(
+            data=self.data,
             target_column=self.target_column,
             data_path=self.data_path,
             use_case=self.use_case,
@@ -120,6 +123,7 @@ class AutoMLPipeline:
         df = preprocessor.run_preprocessing()
 
         trainer = ModelTrainer(
+            data=self.data,
             target_column=self.target_column,
             use_case=self.use_case,
             data_path=self.data_output_path,

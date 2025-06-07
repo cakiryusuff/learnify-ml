@@ -41,6 +41,7 @@ class ModelTrainer:
     hyperparameter_tuning_method (Literal["randomized", "grid"]) : The method to use for hyperparameter tuning.
     """
     def __init__(self,
+                data: pd.DataFrame | None,
                 target_column: str,
                 use_case: Literal["classification", "regression"] = "classification",  # e.g., classification, regression
                 model = RandomForestClassifier(),
@@ -61,6 +62,7 @@ class ModelTrainer:
         if self.target_column is None:
             raise ValueError("target_column must be specified")
         
+        self.data = data
         self.use_case = use_case
         self.model = model
         self.models = models_list or default_models
@@ -238,8 +240,12 @@ class ModelTrainer:
     
     def run_training(self):
         try:
-            logger.info("------------------------------------------------------")            
-            df = load_data(self.data_path)
+            logger.info("------------------------------------------------------")    
+            
+            if self.data is None:        
+                df = load_data(self.data_path)
+            else:
+                df = self.data
             
             X_train, X_test, y_train, y_test = self.split_train_test(df)
             

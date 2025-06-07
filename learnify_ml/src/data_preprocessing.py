@@ -37,7 +37,8 @@ class DataPreprocessor():
     apply_skewness (bool): Whether to apply skewness detection or not.
     """
     
-    def __init__(self, 
+    def __init__(self,
+                data: pd.DataFrame | None = None,
                 target_column: str = None,
                 use_case: Literal["classification", "regression"] = "classification",
                 data_path: str | None = DATA_PREPROCESSING_INPUT,
@@ -58,6 +59,7 @@ class DataPreprocessor():
         if self.target_column is None:
             raise ValueError("target_column must be specified")
         
+        self.data = data
         self.data_path = data_path
         self.use_case = use_case
         self.apply_tf_idf = apply_tf_idf
@@ -74,12 +76,6 @@ class DataPreprocessor():
         self.categorical_columns: List[str] = []
         self.text_columns: List[str] = []
         
-        nltk.download('stopwords', quiet=True)
-        nltk.download('punkt', quiet=True)
-        nltk.download('wordnet', quiet=True)
-        nltk.download('omw-1.4', quiet=True)
-        nltk.download('punkt_tab', quiet=True)
-        
 
     def preprocess_data(self, df: pd.DataFrame) -> pd.DataFrame:
         try:
@@ -91,11 +87,8 @@ class DataPreprocessor():
             
             df = df.copy()
             
-            # df = df.dropna(axis=1, how='all')
-            
             df = df.drop_duplicates()
         
-            
             return df
         
         except Exception as e:
@@ -137,7 +130,7 @@ class DataPreprocessor():
             logger.error(f"Error in splitting object columns: {e}")
             raise CustomException(e, "Error in splitting object columns")
    
-    def handle_missing_values(self, df: pd.DataFrame) -> pd.DataFrame:
+    def handle_missing_values(self, df: pd.DataFrame, impute_strategy: Literal["mean", "median", "most_frequent"], impute_strategy_remove: Literal["column", "row", None]) -> pd.DataFrame:
         """
         Handle missing values in the DataFrame.
         
@@ -152,24 +145,24 @@ class DataPreprocessor():
             
             df = df.copy()
             
-            if self.impute_strategy_remove is None:
+            if impute_strategy_remove is None:
                 logger.info("- Imputing missing values based on the specified strategy")
                 for col in df.columns:
                     if df[col].dtype in ['int64', 'float64']:
-                        if self.impute_strategy == 'mean':
+                        if impute_strategy == 'mean':
                             df[col] = df[col].fillna(df[col].mean())
-                        elif self.impute_strategy == 'median':
+                        elif impute_strategy == 'median':
                             df[col] = df[col].fillna(df[col].median())
-                        elif self.impute_strategy == 'most_frequent':
+                        elif impute_strategy == 'most_frequent':
                             df[col] = df[col].fillna(df[col].mode()[0])
                     else:
                         df[col] = df[col].fillna('Unknown')
                 return df
             else:
                 logger.info("- Removing rows or columns with missing values based on the specified strategy")
-                if self.impute_strategy_remove == "column":
+                if impute_strategy_remove == "column":
                     df = df.dropna(axis=1, how='any')
-                elif self.impute_strategy_remove == "row":
+                elif impute_strategy_remove == "row":
                     df = df.dropna(axis=0, how='any')
                 else:
                     raise ValueError("Invalid impute_strategy_remove value. Use 'column' or 'row'.")
@@ -183,7 +176,8 @@ class DataPreprocessor():
         df: pd.DataFrame,
         method: Literal["zscore", "iqr"] = "iqr",
         threshold: float = 3.0,
-        columns: List[str] = None
+        columns: List[str] = None,
+        apply_outlier: bool = True
     ) -> pd.DataFrame:
         """
         Remove outliers from numeric columns using Z-Score or IQR method.
@@ -199,7 +193,7 @@ class DataPreprocessor():
         - pd.DataFrame: DataFrame with outliers removed.
         """
         try:
-            if not self.apply_outlier:
+            if not apply_outlier:
                 logger.info("Skipping removal of outliers as apply_outlier is set to False")
                 return df
             
@@ -236,7 +230,7 @@ class DataPreprocessor():
             logger.error(f"Error in removing outliers: {e}")
             raise CustomException(e, "Error in removing outliers")
     
-    def scale_numeric_features(self, df: pd.DataFrame) -> pd.DataFrame:
+    def scale_numeric_features(self, df: pd.DataFrame, target_column: str, apply_scale: bool = True) -> pd.DataFrame:
         """
         Scale numeric features in the DataFrame.
         
@@ -247,7 +241,7 @@ class DataPreprocessor():
         pd.DataFrame: The DataFrame with scaled numeric features.
         """
         try:
-            if not self.apply_scale:
+            if not apply_scale:
                 logger.info("Skipping scaling of numeric features as scale_numeric is set to False")
                 return df
             
@@ -257,7 +251,7 @@ class DataPreprocessor():
             from sklearn.preprocessing import StandardScaler
             
             numeric_cols = df.select_dtypes(include=['float64', 'int64']).columns
-            numeric_cols = [col for col in numeric_cols if col != self.target_column]
+            numeric_cols = [col for col in numeric_cols if col != target_column]
             scaler = StandardScaler()
             df[numeric_cols] = scaler.fit_transform(df[numeric_cols])
             
@@ -266,7 +260,7 @@ class DataPreprocessor():
             logger.error(f"Error in scaling numeric features: {e}")
             raise CustomException(e, "Error in scaling numeric features")
     
-    def label_encode(self, df: pd.DataFrame, categorical_columns: List[str]) -> pd.DataFrame:
+    def label_encode(self, df: pd.DataFrame, categorical_columns: List[str], target_column: str, encode_target_column: bool) -> pd.DataFrame:
         """
         Label encode categorical columns in the DataFrame.
         
@@ -284,16 +278,16 @@ class DataPreprocessor():
             for col in categorical_columns:
                 df[col] = df[col].astype('category').cat.codes
                 
-            if self.encode_target_column and self.target_column in df.columns:
-                logger.info(f"Label encoding target column: {self.target_column}")
-                df[self.target_column] = df[self.target_column].astype('category').cat.codes
+            if encode_target_column and target_column in df.columns:
+                logger.info(f"Label encoding target column: {target_column}")
+                df[target_column] = df[target_column].astype('category').cat.codes
                 
             return df
         except Exception as e:
             logger.error(f"Error in label encoding: {e}")
             raise CustomException(e, "Error in label encoding")
 
-    def feature_selection(self, df: pd.DataFrame, k: int = 20) -> pd.DataFrame:
+    def feature_selection(self,df: pd.DataFrame, use_case: Literal["classification", "regression"], target_column: str, k: int = 20, apply_feature_selection: bool = True) -> pd.DataFrame:
         """
         Select features based on mutual information (for classification)
         or F-regression score (for regression).
@@ -306,20 +300,20 @@ class DataPreprocessor():
         pd.DataFrame: The DataFrame with selected features.
         """
         try:
-            if not self.apply_feature_selection:
+            if not apply_feature_selection:
                 logger.info("Skipping feature selection as apply_feature_selection is set to False")
                 return df
             
             logger.info("Starting feature selection")
 
             df = df.copy()
-            X = df.drop(columns=[self.target_column])
-            y = df[self.target_column]
+            X = df.drop(columns=[target_column])
+            y = df[target_column]
 
             # Determine selection method based on problem type
-            if self.use_case == "classification":
+            if use_case == "classification":
                 selector = SelectKBest(score_func=mutual_info_classif, k=min(k, X.shape[1]))
-            elif self.use_case == "regression":
+            elif use_case == "regression":
                 # selector = SelectKBest(score_func=f_regression, k=min(k, X.shape[1]))
                 selector = SelectKBest(score_func=mutual_info_regression, k=min(k, X.shape[1]))
 
@@ -335,7 +329,7 @@ class DataPreprocessor():
             logger.error(f"Error in feature selection: {e}")
             raise CustomException(e, "Error in feature selection")
 
-    def variance_inflation(self, df: pd.DataFrame) -> pd.DataFrame:
+    def variance_inflation(self, df: pd.DataFrame, apply_vif: bool = True) -> pd.DataFrame:
         """
         Calculate and remove features with high variance inflation factor (VIF).
         
@@ -346,7 +340,7 @@ class DataPreprocessor():
         pd.DataFrame: The DataFrame with features having high VIF removed.
         """
         try:
-            if not self.apply_vif:
+            if not apply_vif:
                 logger.info("Skipping variance inflation factor (VIF) calculation as apply_vif is set to False")
                 return df
             
@@ -402,7 +396,7 @@ class DataPreprocessor():
             logger.error(f"Error in applying Principal Component Analysis (PCA): {e}")
             raise CustomException(e, "Error in applying Principal Component Analysis (PCA)")
         
-    def skewness_treatment(self, df: pd.DataFrame) -> pd.DataFrame:
+    def skewness_treatment(self, df: pd.DataFrame, apply_skewness: bool = False) -> pd.DataFrame:
         """
         Apply log transformation to skewed numerical features.
         
@@ -413,7 +407,7 @@ class DataPreprocessor():
         pd.DataFrame: The DataFrame with skewed features transformed.
         """
         try:
-            if not self.apply_skewness:
+            if not apply_skewness:
                 logger.info("Skipping skewness treatment as apply_skewness is set to False")
                 return df
             
@@ -462,7 +456,7 @@ class DataPreprocessor():
 
         return cleaned_text
     
-    def tf_idf_vectorization(self, df: pd.DataFrame, text_columns: List[str]) -> pd.DataFrame:
+    def tf_idf_vectorization(self, df: pd.DataFrame, text_columns: List[str], preprocess_text: function, apply_tf_idf: bool = True) -> pd.DataFrame:
         """
         Apply TF-IDF vectorization to text columns in the DataFrame.
         Parameters:
@@ -472,9 +466,15 @@ class DataPreprocessor():
         pd.DataFrame: The DataFrame with TF-IDF vectorized text columns.
         """
         try:
-            if not self.apply_tf_idf or not text_columns:
+            if not apply_tf_idf or not text_columns:
                 logger.info("Skipping TF-IDF vectorization as apply_tf_idf is set to False")
                 return df
+            
+            nltk.download('stopwords', quiet=True)
+            nltk.download('punkt', quiet=True)
+            nltk.download('wordnet', quiet=True)
+            nltk.download('omw-1.4', quiet=True)
+            nltk.download('punkt_tab', quiet=True)
             
             from sklearn.feature_extraction.text import TfidfVectorizer
             
@@ -482,7 +482,7 @@ class DataPreprocessor():
             df = df.copy()
             
             for col in text_columns:
-                cleaned_texts = df[col].astype(str).apply(self.preprocess_text)
+                cleaned_texts = df[col].astype(str).apply(preprocess_text)
                 vectorizer = TfidfVectorizer(max_features=500, max_df=0.9)
                 tfidf_matrix = vectorizer.fit_transform(cleaned_texts)
 
@@ -496,7 +496,7 @@ class DataPreprocessor():
             logger.error(f"Error in applying TF-IDF vectorization: {e}")
             raise CustomException(e, "Error in applying TF-IDF vectorization")
     
-    def balance_data(self, df: pd.DataFrame) -> pd.DataFrame:
+    def balance_data(self, df: pd.DataFrame, target_column: str, use_case: Literal["classification", "regression"], apply_smote: bool = True) -> pd.DataFrame:
         """
         Balance the dataset using random oversampling.
         
@@ -509,7 +509,7 @@ class DataPreprocessor():
         """
         try:
             
-            if not self.apply_smote or self.use_case == "regression":
+            if not apply_smote or use_case == "regression":
                 logger.info("Skipping balancing data as apply_smote is set to False")
                 return df
             
@@ -518,8 +518,8 @@ class DataPreprocessor():
             logger.info("Balancing the dataset using SMOTE")
             from imblearn.over_sampling import SMOTE
             
-            X = df.drop(columns=[self.target_column])
-            y = df[self.target_column]
+            X = df.drop(columns=[target_column])
+            y = df[target_column]
             
             smote = SMOTE(random_state=42)
             X_resampled, y_resampled = smote.fit_resample(X, y)
@@ -540,31 +540,34 @@ class DataPreprocessor():
             logger.info("------------------------------------------------------")
             logger.info("Running complete preprocessing pipeline")
             
-            df = load_data(self.data_path)
-
+            if self.data is None:
+                df = load_data(self.data_path)
+            else:
+                df = self.data
+            
             df = self.preprocess_data(df)
 
             df, self.categorical_columns, self.text_columns = self.split_object_columns(df)
 
-            df = self.remove_outliers(df)
+            df = self.remove_outliers(df, apply_outlier=self.apply_outlier)
 
-            df = self.handle_missing_values(df)
+            df = self.handle_missing_values(df, self.impute_strategy, self.impute_strategy_remove)
 
-            df = self.skewness_treatment(df)
+            df = self.skewness_treatment(df, apply_skewness=self.apply_skewness)
 
-            df = self.scale_numeric_features(df)
+            df = self.scale_numeric_features(df, target_column=self.target_column, apply_scale=self.apply_scale)
 
-            df = self.label_encode(df, self.categorical_columns)
+            df = self.label_encode(df, self.categorical_columns, target_column=self.target_column, encode_target_column=self.encode_target_column)
             
             # df = self.principal_component_analysis(df)
             
-            df = self.tf_idf_vectorization(df, self.text_columns)
+            df = self.tf_idf_vectorization(df, self.text_columns, preprocess_text=self.preprocess_text, apply_tf_idf=self.apply_tf_idf)
 
-            df = self.feature_selection(df)
+            df = self.feature_selection(df, use_case=self.use_case, target_column=self.target_column, apply_feature_selection=self.apply_feature_selection)
 
-            df = self.variance_inflation(df)
+            df = self.variance_inflation(df, apply_vif=self.apply_vif)
 
-            df = self.balance_data(df)
+            df = self.balance_data(df, target_column=self.target_column, use_case=self.use_case, apply_smote=self.apply_smote)
             
             save_data(df, self.data_output_path)
             
