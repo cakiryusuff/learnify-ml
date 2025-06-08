@@ -35,16 +35,10 @@
 pip install learnify-ml
 ```
 
-If the package is not yet on PyPI, you can install locally:
-
-```
-git clone https://github.com/yourusername/learnify-ml.git
-cd learnify-ml
-pip install -e .
-```
-
-## Usage
+## Pipeline Usage
 🔹 1. Import the main pipeline class
+
+Main Pipeline Class contains DataPreprocessor and ModelTrainer
 
 ```python
 from learnify_ml import AutoMLPipeline
@@ -67,20 +61,87 @@ trainer = AutoMLPipeline(target_column="target_column",
                       test_size=0.2,
                       impute_strategy="mean",
                       ).run_pipeline()
-trainer.run_pipeline()
+
+best_model, evaluation_results, df = trainer.run_pipeline()
+```
+## Visualizer
+```python
+from learnify_ml import DataVisualizer
+
+data_visualizer = DataVisualizer(
+    data_path='learnify_ml/artifacts/dataset/possum.csv'
+)
+
+data_visualizer.visualize_feature_distribution()
+
+data_visualizer.visualize_correlation_matrix()
+
+data_visualizer.visualize_pairwise_relationships_numerical('totlngth')
 ```
 
-## Example Functions
+
+## DataPreprocessor
+
+Each method is modular and can be used independently.
 
 ```python
-df = trainer.remove_outliers(df)
-df = trainer.handle_missing_values(df)
-df = trainer.scale_numeric_features(df)
+from learnify_ml import DataPreprocessor
 ```
 
-Each method is modular and can be used independently or inside run_pipeline().
+```python
+data_preprocessor = DataPreprocessor(
+    data_path='learnify_ml/artifacts/dataset/possum.csv',
+    use_case="regression",
+    target_column="totlngth",
+    apply_outlier = False,
+    apply_vif= False,
+    apply_skewness = False,
+    apply_tf_idf = False,
+    encode_target_column = False,
+    apply_scale = True,
+    apply_smote = True,
+    apply_feature_selection = True,
+)
 
+df = data_preprocessor.run_preprocessing()
+```
 
+or
 
+```python
+data_preprocessor = DataPreprocessor()
 
+df = data_preprocessor.label_encode(
+    df=df,
+    categorical_columns=categorical_columns,
+    target_column=target_column,
+    encode_target_column=encode_target_column
+)
 
+df = data_preprocessor.variance_inflation(df=df)
+
+df = data_preprocessor.split_object_columns(
+    df=df,
+    max_unique_thresh=30,
+    min_avg_len_thresh=20
+)
+```
+
+## ModelTrainer
+
+You can pass your own models or use default RandomForest.
+
+```python
+from learnify_ml import ModelTrainer
+
+model_trainer = ModelTrainer(
+    data_path='learnify_ml/artifacts/dataset/possum.csv',
+    use_case="regression",
+    target_column="totlngth",
+    apply_hyperparameter_tuning=True,
+    hyperparameter_tuning_method="randomized"
+)
+
+best_model, evaluation_results = model_trainer.run_training()
+```
+ModelTrainer returns 2 value; best_model, evaluation_results.
