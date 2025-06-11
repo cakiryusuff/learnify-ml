@@ -1,6 +1,25 @@
-# learnify-ml
+<h1 align="center">LEARNIFY-ML</h1>
 
-**learnify-ml** is a lightweight and modular Python package designed to **automate preprocessing pipelines** for machine learning datasets. With minimal configuration, it applies standard best practices to clean, transform, and prepare data for training.
+<p align="center"><i>Accelerate Innovation, Master Data, Power Predictions</i></p>
+
+<p align="center">
+  <img src="https://img.shields.io/github/last-commit/cakiryusuff/learnify-ml?label=last%20commit"/>
+  <img src="https://img.shields.io/badge/python-100.0%25-blue"/>
+  <img src="https://img.shields.io/badge/languages-1-blue"/>
+</p>
+
+<p align="center"><i>Built with the tools and technologies:</i></p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/scikitlearn-orange?style=flat&logo=scikit-learn"/>
+  <img src="https://img.shields.io/badge/tqdm-yellow"/>
+  <img src="https://img.shields.io/badge/NumPy-013243?style=flat&logo=numpy&logoColor=white"/>
+  <br>
+  <img src="https://img.shields.io/badge/Python-blue?style=flat&logo=python"/>
+  <img src="https://img.shields.io/badge/SciPy-blueviolet?style=flat&logo=scipy"/>
+  <img src="https://img.shields.io/badge/pandas-150458?style=flat&logo=pandas"/>
+  <img src="https://img.shields.io/badge/YAML-red?style=flat"/>
+</p>
 
 ---
 
